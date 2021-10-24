@@ -273,7 +273,7 @@ def statistics(request):   # функция рендеринга страниц�
         NO2.append(data.NO2)
         PM10.append(data.MP10)
         PM25.append(data.MP25)
-    data = weather.get_breez_current(55.755819, 37.617644)['data']  # получение погоды
+    data = weather.get_breez_current(55.755819, 37.617644)['data'] # получение погоды
     return render(request, "statistics.html",
                   {'ind': industry, 'data': data, 'label': label, 'co': CO, 'no': NO, 'no2': NO2, 'pm10': PM10,
                    'pm25': PM25})
