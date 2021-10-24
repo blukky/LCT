@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSecondary">#8f8f8f</color>
+
+    <color name="completed_state_color">#6089cd</color>
+    <color name="normal_state_color">#000000</color>
+    <color name="purple_200">#616161</color>
+    <color name="purple_500">#373737</color>
+    <color name="purple_700">#8e8e8e</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="dary">#0008ff</color>
+
+    <color name="colorAccentLightDark">#0083ff</color>
+    <color name="colorAccentDark">#0083ff</color>
+    <color name="collapsing">#0083ff</color>
+    <color name="mapping_color">#92e8ff</color>
+    <color name="mapping_color_dary">#77e1fd</color>
+    <color name="app_background">#F5F5F5</color>
+
+    <color name="colorPrimary">#5C6BC0</color>
+    <color name="colorPrimaryDark">#736653</color>
+    <color name="colorAccent">#ffe97d</color>
+    <color name="white">#ffffff</color>
+    <color name="grey">#E9EAEE</color>
+    <color name="yellow">#F8BA0F</color>
+    <color name="goodgrey">#535353</color>
+    <color name="blue">#293859</color>
+    <color name="lightgrey">#EEEEEE</color>
+    <color name="img_1">#b5bfce</color>
+    <color name="img_2">#ced3da</color>
+    <color name="img_3">#e0e2e4</color>
+
+    <color name="happy_orange">#F49C1E</color>
+    <color name="flower_outer_mapping">#ffe8c7</color>
+
+    <color name="curated_light">#c6c6c6</color>
+    <color name="curated">#777777</color>
+    <color name="bg_color">#f7f7f7</color>
+    <color name="black">#000000</color>
+    <color name="gray">#656565</color>
+    <color name="indigo_ink">#283655</color>
+    <color name="black_effective">#2a2a2a</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="view_line">#F7F7F9</color>
+    <color name="icon_default">#F0F0E9</color>
+
+
+    <color name="being_dark">#B34C26</color>
+    <color name="happy">#0083ff</color>
+    <color name="forgot">#007AFF</color>
+    <color name="audio_background">#FDEFE9</color>
+    <color name="media">#EA6D78</color>
+    <color name="gratitude_txt">#666666</color>
+    <color name="gratitude_btn">#FCBC54</color>
+    <color name="cal">#ff0801</color>
+    <color name="white_trans">#99FFFFFF</color>
+
+    <color name="red_dark">#F06423</color>
+    <color name="red_dark2">#D85A1B</color>
+    <color name="cyan_light">#c9ebee</color>
+    <color name="cyan">#b5e3e7</color>
+    <color name="cyan_dark">#70BDC6</color>
+    <color name="navy_blue">#214258</color>
+    <color name="navy_blue_dark">#1C3A4E</color>
+    <color name="light_green">#78DC96</color>
+    <color name="light_blue">#55C8F0</color>
+    <color name="blue_black_dark">#13171d</color>
+    <color name="blue_black_light">#516179</color>
+    <color name="blue_grey_light">#A5B4C8</color>
+    <color name="orange">#FFA500</color>
+
+
+
+    <color name="fone">#616161</color>
+    <color name="dont_active">#bdbdbd</color>
+    <color name="color_back_edit_text">#f5f5f5</color>
+
+    <color name="white_fone_1">#ffffff</color>
+    <color name="white_fone_2">#494949</color>
+
+
+    <color name="red_l">#e53935</color>
+    <color name="red_l_transparent">#40E53935</color>
+    <color name="red_d">#ffebee</color>
+
+    <color name="purpure_l">#8e24aa</color>
+    <color name="purpure_l_transparent">#408e24aa</color>
+    <color name="purpure_d">#f3e5f5</color>
+
+    <color name="sapphirine_l">#3949ab</color>
+    <color name="sapphirine_l_transparent">#403949ab</color>
+    <color name="sapphirine_d">#e8eaf6</color>
+
+    <color name="blue_l">#1b87e5</color>
+    <color name="blue_l_transparent">#401b87e5</color>
+    <color name="blue_d">#e3f2fd</color>
+
+    <color name="green_l">#43a047</color>
+    <color name="green_l_transparent">#4043a047</color>
+    <color name="green_d">#e8f5e9</color>
+
+    <color name="yellow_l">#fdd835</color>
+    <color name="yellow_l_transparent">#40fdd835</color>
+    <color name="yellow_d">#fffde7</color>
+
+    <color name="orange_l">#fb8c00</color>
+    <color name="orange_l_transparent">#40fb8c00</color>
+    <color name="orange_d">#fff3e0</color>
+
+    <color name="brown_l">#6d4c41</color>
+    <color name="brown_l_transparent">#406d4c41</color>
+    <color name="brown_d">#efebe9</color>
+
+    <color name="grey_l">#757575</color>
+    <color name="grey_l_transparent">#40757575</color>
+    <color name="grey_d">#fafafa</color>
+
+    <color name="indigo_l">#546e7a</color>
+    <color name="indigo_l_transparent">#40546e7a</color>
+    <color name="indigo_d">#eceff1</color>
+
+
+
+
+    <color name="darkGray">#A9A9A9</color>
+    <color name="transparent_gold">#00A9A9A9</color>
+    <color name="transparent_nemnogo">#80FFFFFF</color>
+
+    <color name="page_indicator_dark">#80ffffff</color>
+    <color name="page_indicator_dark_selected">#ffffffff</color>
+
+    <color name="visual_dark">#36539D</color>
+    <color name="visual_light">#778DAE</color>
+
+    <color name="tubik_bg_color">#FDFDFE</color>
+    <color name="tubik_primary_color">#FD9BA3</color>
+    <color name="gray_transp">#30FFFFFF</color>
+</resources>
