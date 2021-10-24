@@ -1,0 +1,496 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block filtr %}{% endblock %}
+{% block content %}
+    <div class="menu">
+        <div class="main-menu">
+            <div class="scroll">
+                <ul class="list-unstyled">
+                    <li >
+                        <a href="{% url 'map' %}">{# #dashboard #}
+                            <i class="simple-icon-map"></i>
+                            <span>Карта контроля</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'statistics' %}">{# #layouts#}
+                            <i class="iconsminds-monitor-analytics"></i> Статистика
+                        </a>
+                    </li>
+                    <li >
+                        <a href="{% url 'predict' %}">{# #applications#}
+                            <i class="iconsminds-statistic"></i> Прогноз
+                        </a>
+                    </li>
+                    <li >
+                        <a href="{% url 'location' %}">{# #ui#}
+                            <i class="iconsminds-map2"></i> Засечь место
+                        </a>
+                    </li>
+                    <li >
+                        <a href="{% url 'create_model' %}">{# #menu#}
+                            <i class="iconsminds-coding"></i> Создание модели
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'docs' %}">
+                            <i class="iconsminds-library"></i> Информация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <main>
+        <div class="row equal-height-container">
+
+                <div class="col-md-12 col-xl-6 mb-4 col-item">
+                    <div class="card">
+                        <div class="card-body pt-5 pb-5 d-flex flex-column">
+                            <div class="text-center">
+{#                                <i class="iconsminds-director large-icon"></i>#}
+                                <img style="margin-bottom: 5%; margin-top: 5%;" src="https://mosecom.mos.ru/wp-content/uploads/2018/02/1.png">
+                                <h5 class="mb-0 font-weight-semibold color-theme-1 mb-4">Мониторинг атмосферного воздуха</h5>
+                            </div>
+                            <div class="pl-3 pr-3 pt-3 pb-0 d-flex flex-column flex-grow-1">
+                                <div class="card mb-4 progress-banner" style="max-height: 30%;">
+                                    <div class="card-body justify-content-between d-flex flex-row align-items-center" style="padding: 0.5rem 2.75rem 0.5rem 2.75rem">
+                                        <div>
+{#                                            <i class="iconsminds-male mr-2 text-white align-text-bottom d-inline-block" style="margin-bottom: 0;"></i>#}
+                                            <img src="{% static 'img/stations/stat.svg' %}" style="width: 10%; color: #FFFFFF">
+                                            <div>
+                                                <p class="lead text-white">59 автоматических станций контроля загрязнения</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div role="progressbar"
+                                                 class="progress-bar-circle progress-bar-banner position-relative"
+                                                 data-color="white"
+                                                 data-trail-color="rgba(255,255,255,0.2)" aria-valuenow="59"
+                                                 aria-valuemax="59"
+                                                 data-show-percent="false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-4 progress-banner" style="max-height: 30%;">
+                                    <div class="card-body justify-content-between d-flex flex-row align-items-center" style="padding: 0.5rem 2.75rem 0.5rem 2.75rem">
+                                        <div>
+{#                                            <i class="iconsminds-male mr-2 text-white align-text-bottom d-inline-block" style="margin-bottom: 0;"></i>#}
+                                            <img src="{% static 'img/stations/mobil_stat.svg' %}" style="width: 10%; color: #FFFFFF">
+
+                                            <div>
+                                                <p class="lead text-white">4 мобильные станции</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div role="progressbar"
+                                                 class="progress-bar-circle progress-bar-banner position-relative"
+                                                 data-color="white"
+                                                 data-trail-color="rgba(255,255,255,0.2)" aria-valuenow="4"
+                                                 aria-valuemax="4"
+                                                 data-show-percent="false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-4 progress-banner" style="max-height: 30%;">
+                                    <div class="card-body justify-content-between d-flex flex-row align-items-center" style="padding: 0.5rem 2.75rem 0.5rem 2.75rem">
+                                        <div>
+{#                                            <i class="iconsminds-male mr-2 text-white align-text-bottom d-inline-block" style="margin-bottom: 0;"></i>#}
+                                            <img src="{% static 'img/stations/ti_stat.svg' %}" style="width: 10%; color: #FFFFFF">
+                                            <div>
+                                                <p class="lead text-white">6 станций на территории ТиНАО</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div role="progressbar"
+                                                 class="progress-bar-circle progress-bar-banner position-relative"
+                                                 data-color="white"
+                                                 data-trail-color="rgba(255,255,255,0.2)" aria-valuenow="6"
+                                                 aria-valuemax="6"
+                                                 data-show-percent="false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-4 progress-banner" style="max-height: 30%;">
+                                    <div class="card-body justify-content-between d-flex flex-row align-items-center" style="padding: 0.5rem 2.75rem 0.5rem 2.75rem">
+                                        <div>
+{#                                            <i class="iconsminds-male mr-2 text-white align-text-bottom d-inline-block" style="margin-bottom: 0;"></i>#}
+                                            <img src="{% static 'img/stations/vis_stat.svg' %}" style="width: 10%; color: #FFFFFF">
+                                            <div>
+                                                <p class="lead text-white">3 высотных станции на Останкинской телебашне</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div role="progressbar"
+                                                 class="progress-bar-circle progress-bar-banner position-relative"
+                                                 data-color="white"
+                                                 data-trail-color="rgba(255,255,255,0.2)" aria-valuenow="3"
+                                                 aria-valuemax="3"
+                                                 data-show-percent="false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-4 progress-banner" style="max-height: 30%;">
+                                    <div class="card-body justify-content-between d-flex flex-row align-items-center" style="padding: 0.5rem 2.75rem 0.5rem 2.75rem">
+                                        <div>
+{#                                            <i class="iconsminds-male mr-2 text-white align-text-bottom d-inline-block" style="margin-bottom: 0;"></i>#}
+                                            <img src="{% static 'img/stations/ezd_stat.svg' %}" style="width: 10%; color: #FFFFFF">
+                                            <div>
+                                                <p class="lead text-white">3 Передвижные экологические лаборатории</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div role="progressbar"
+                                                 class="progress-bar-circle progress-bar-banner position-relative"
+                                                 data-color="white"
+                                                 data-trail-color="rgba(255,255,255,0.2)" aria-valuenow="3"
+                                                 aria-valuemax="3"
+                                                 data-show-percent="false">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-xl-6 mb-4 col-item">
+                    <div class="card">
+                        <div class="card-body pt-5 pb-5 d-flex flex-column">
+                            <div class="text-center">
+                                <i class="iconsminds-security-settings large-icon"></i>
+                                <h5 class="mb-0 font-weight-semibold color-theme-1 mb-4">Основные направления нашей деятельности</h5>
+                            </div>
+                            <div class="pl-3 pr-3 pt-3 pb-0 d-flex flex-column flex-grow-1">
+                                <p class="text-muted mb-4">Основными направлениями деятельности МОСЭКОМОНИТОРИНГА являются:</p>
+                                <ul class="list-unstyled mb-0">
+                                    <table class="table table-hover">
+                        <tbody>
+                        <tr class="odd">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Осуществление государственного экологического мониторинга на территории города Москвы (регулярные наблюдения за состоянием атмосферного воздуха, поверхностных водных объектов, почв, зеленых насаждений, уровней шума, опасных геоэкологических процессов)</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Эксплуатация автоматических станций контроля загрязнения атмосферы, водных объектов, шума.</td>
+                        </tr>
+                        <tr class="odd">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Проведение экологических обследований территорий города по обращениям населения, органов власти, городских организаций и т.д.</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Осуществление технического контроля за созданием и работой автоматических систем контроля промышленных выбросов на крупнейших предприятиях Москвы и контроль результатов измерений.</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Анализ данных о состоянии природных сред в городе Москве.</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Предоставление экологической информации различным категориям пользователей и населению, в том числе через официальный сайт в информационно-телекоммуникационной сети «Интернет».</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Ведение Единого городского фонда данных экологического мониторинга.</td>
+                        </tr>
+                        <tr class="even">
+                            <th scope="row"><img src="https://mosecom.mos.ru/wp-content/themes/moseco/img/wave.png"></th>
+                            <td colspan="2">Входим в состав Единой системы оперативно-диспетчерского управления в чрезвычайных ситуациях города Москвы (ГУ МЧС России по городу Москве).</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            <style>
+                .lead {
+                    font-size: 0.8rem;
+                }
+            </style>
+
+
+                <div class="col-md-12 col-xl-6 mb-4 col-item">
+                    <div class="card">
+                        <div class="card-body pt-5 pb-5 d-flex flex-column">
+                            <div class="text-center">
+                                <i class="iconsminds-box-with-folders large-icon"></i>
+                                <h5 class="mb-0 font-weight-semibold color-theme-1 mb-4">Отчеты</h5>
+                            </div>
+                            <div class="pl-3 pr-3 pt-3 pb-0 d-flex flex-column flex-grow-1">
+                                <div class="row">
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2021/07/PDpolicy.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">Политика ОПД</p>
+                                                <p class="lead text-center">2012</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2019/07/СОУТ270619.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">СОУТ</p>
+                                                <p class="lead text-center">270619</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2020/07/СОУТ13072020.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">СОУТ</p>
+                                                <p class="lead text-center">13072020</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2020/11/СОУТ30112020.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">СОУТ</p>
+                                                <p class="lead text-center">30112020</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2020/02/Основные-положения-УП-на-2019.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">Положения УП</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2021/07/PDpolicy.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">Политика ГПБУ</p>
+                                                <p class="lead text-center">27.07.2006</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/salary/" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">ИНФО ЗП</p>
+                                                <p class="lead text-center">2017-2020</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2019/05/Квартальный-отчет-1-кв.-2019.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">1 квартал</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2020/02/Квартальный-отчет-2-кв.2019.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">2 квартал</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2021/01/Квартальный-отчет-3-кв.2019.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">3 квартал</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://mosecom.mos.ru/wp-content/uploads/2021/01/Квартальный-отчет-4-кв.2019.pdf" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">4 квартал</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 glide__slide">
+                                        <a href="https://www.mnr.gov.ru/docs/gosudarstvennye_doklady/" target="_blank" class="card">
+                                            <div class="card-body text-center">
+                                                <i class="iconsminds-file-zip"></i>
+                                                <p class="card-text mb-0">Госдоклад ООС</p>
+                                                <p class="lead text-center">2019</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-xl-6 mb-4 col-item">
+                    <div class="card">
+                        <div class="card-body pt-5 pb-5 d-flex flex-column">
+                            <div class="text-center">
+                                <i class="iconsminds-newspaper large-icon"></i>
+                                <h5 class="mb-0 font-weight-semibold color-theme-1 mb-4">Наши партнеры</h5>
+                            </div>
+                            <div class="pl-3 pr-3 pt-3 pb-0 d-flex flex-column flex-grow-1">
+
+                                <div class="row">
+                                    <div class="col-4 glide__slide" >
+                                        <a href="https://77.rospotrebnadzor.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/4c08052159d088273d79e7b2af2b84a3-1.jpg" style="width: 60%">
+                                                <p class="card-text mb-0">Управление</p>
+                                                <p class="card-text mb-0">Роспотребнадзора</p>
+                                                <p class="card-text mb-0">по городу</p>
+                                                <p class="card-text mb-0">Москве</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://genplanmos.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/Логотип_Института_Генплана_Москвы.svg_.png" style="width: 60%">
+                                                <p class="card-text mb-0">Институт</p>
+                                                <p class="card-text mb-0">Генплана</p>
+                                                <p class="card-text mb-0">Москвы</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://www.madi.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/madi.jpg" style="width: 60%">
+                                                <p class="card-text mb-0">МАДИ</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://www.msu.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/mgu.png" style="width: 60%">
+                                                <p class="card-text mb-0">МГУ</p>
+                                                <p class="card-text mb-0">им. Ломоносова</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://meteoinfo.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/gidro.png" style="width: 60%">
+                                                <p class="card-text mb-0">Гидрометцентр</p>
+                                                <p class="card-text mb-0">России</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="http://ifaran.ru/index.html" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/ifa.png" style="width: 60%">
+                                                <p class="card-text mb-0">Институт</p>
+                                                <p class="card-text mb-0">физики</p>
+                                                <p class="card-text mb-0">атмосферы</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://rpn.gov.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/rosprirodnadzor_emb_n8355.gif" style="width: 60%">
+                                                <p class="card-text mb-0">Росприроднадзор</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="http://www.gucodd.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/ЦОДД.b4687c510f166a82a4dc7d7e123cd02e-2.png" style="width: 60%">
+                                                <p class="card-text mb-0">Центр</p>
+                                                <p class="card-text mb-0">организации</p>
+                                                <p class="card-text mb-0">дорожного</p>
+                                                <p class="card-text mb-0">движения</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 glide__slide">
+                                        <a href="https://moscow.mchs.gov.ru/" class="card" target="_blank" style="box-shadow: 0 0 0 0">
+                                            <div class="card-body text-center align-items-center" style="padding: 0; justify-content: flex-start">
+                                                <img src="https://mosecom.mos.ru/wp-content/uploads/2018/01/17292_html_1506d2bd-1.png" style="width: 60%">
+                                                <p class="card-text mb-0">ГУ МЧС по</p>
+                                                <p class="card-text mb-0">г. Москве</p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </main>
+    {% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/chartjs-plugin-datalabels.js' %}"></script>
+    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script src="{% static 'js/vendor/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'js/vendor/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/progressbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/vendor/Sortable.js' %}"></script>
+    <script src="{% static 'js/vendor/mousetrap.min.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+{% endblock %}

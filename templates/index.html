@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>МОСЭКОМОНИТОРИНГ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    {% block link %}
+        <link rel="stylesheet" href="{% static 'font/iconsmind-s/css/iconsminds.css' %}"/>
+        <link rel="stylesheet" href="{% static 'font/simple-line-icons/css/simple-line-icons.css' %}"/>
+
+        <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.rtl.only.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/fullcalendar.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/dataTables.bootstrap4.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/datatables.responsive.bootstrap4.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/perfect-scrollbar.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-stars.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-datepicker3.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/vendor/component-custom-switch.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+
+    {% endblock %}
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}" type="image/png">
+
+    {#    MAPBOX#}
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css" rel="stylesheet"/>
+
+    <style type="text/css">
+        .station {
+            background-image: url("{% static "img/data.svg" %}");
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .prom {
+            background-image: url("{% static "img/prom.svg" %}");
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .build {
+            background-image: url("{% static "img/build.svg" %}");
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mapboxgl-popup {
+            min-width: 400px;
+            max-height: 500px;
+            overflow: auto;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+            border-radius: .75rem;
+        }
+
+        .filter {
+            cursor: pointer;
+        }
+
+        .activ {
+            color: #184f90 !important;
+        }
+    </style>
+</head>
+
+
+<body id="app-container" class="menu-default show-spinner">
+<nav class="navbar fixed-top">
+    <div class="d-flex align-items-center navbar-left">
+        <a href="#" class="menu-button d-none d-md-block">
+            <svg class="main" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 17">
+                <rect x="0.48" y="0.5" width="7" height="1"/>
+                <rect x="0.48" y="7.5" width="7" height="1"/>
+                <rect x="0.48" y="15.5" width="7" height="1"/>
+            </svg>
+            <svg class="sub" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17">
+                <rect x="1.56" y="0.5" width="16" height="1"/>
+                <rect x="1.56" y="7.5" width="16" height="1"/>
+                <rect x="1.56" y="15.5" width="16" height="1"/>
+            </svg>
+        </a>
+
+        <a href="#" class="menu-button-mobile d-xs-block d-sm-block d-md-none">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 17">
+                <rect x="0.5" y="0.5" width="25" height="1"/>
+                <rect x="0.5" y="7.5" width="25" height="1"/>
+                <rect x="0.5" y="15.5" width="25" height="1"/>
+            </svg>
+        </a>
+
+        {% block filtr %}
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-backdrop="static"
+                    data-target="#exampleModalRight">Слои и фильтры
+            </button>
+        {% endblock %}
+    </div>
+
+
+    <a class="navbar-logo" href="Dashboard.Default.html">
+        <span class="logo d-none d-xs-block"></span>
+        <span class="logo-mobile d-block d-xs-none"></span>
+    </a>
+
+    <div class="navbar-right">
+        <div class="header-icons d-inline-block align-middle">
+            <div class="d-none d-md-inline-block align-text-bottom mr-3">
+                <div class="custom-switch custom-switch-primary-inverse custom-switch-small pl-1"
+                     data-toggle="tooltip" data-placement="left" title="Темный режим">
+                    <input class="custom-switch-input" id="switchDark" type="checkbox" checked>
+                    <label class="custom-switch-btn" for="switchDark"></label>
+                </div>
+            </div>
+
+            <button class="header-icon btn btn-empty d-none d-sm-inline-block" type="button" id="fullScreenButton">
+                <i class="simple-icon-size-fullscreen"></i>
+                <i class="simple-icon-size-actual"></i>
+            </button>
+
+        </div>
+
+    </div>
+</nav>
+{% block content %}
+    <div class="menu">
+        <div class="main-menu">
+            <div class="scroll">
+                <ul class="list-unstyled">
+                    <li class="active">
+                        <a href="{% url 'map' %}">{# #dashboard #}
+                            <i class="simple-icon-map"></i>
+                            <span>Карта контроля</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'statistics' %}">{# #layouts#}
+                            <i class="iconsminds-monitor-analytics"></i> Статистика
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'predict' %}">{# #applications#}
+                            <i class="iconsminds-statistic"></i> Прогноз
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'location' %}">{# #ui#}
+                            <i class="iconsminds-map2"></i> Засечь место
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_model' %}">{# #menu#}
+                            <i class="iconsminds-coding"></i> Создание модели
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'docs' %}">
+                            <i class="iconsminds-library"></i> Информация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="map" style="max-width: 100%;"></div>
+
+    <div class="modal fade modal-right" id="exampleModalRight" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalRight" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Слои и фильтры</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="list" class="row" align="center">
+                        <a id="station" href="#" class="col icon-menu-item activ ">
+                            <i class="iconsminds-berlin-tower d-block" style="font-size: 2rem"></i>
+                            <span>Метеостанции</span>
+                        </a>
+
+                        <a id="breez" href="#" class="col icon-menu-item activ">
+                            <i class="iconsminds-windy d-block" style="font-size: 2rem"></i>
+                            <span>Качество воздуха</span>
+                        </a>
+                    </div>
+                    <div class="row" align="center">
+                        <a id="car" href="#" class="col icon-menu-item activ">
+                            <i class="iconsminds-traffic-light d-block" style="font-size: 2rem"></i>
+                            <span>Автомобильный трафик</span>
+                        </a>
+
+                        <a href="#" id="popul" class="col icon-menu-item">
+                            <i class="iconsminds-mens d-block" style="font-size: 2rem"></i>
+                            <span>Плотность населения</span>
+                        </a>
+                    </div>
+                    <div class="row" align="center">
+                        <a id="build" href="#" class="col icon-menu-item">
+                            <i class="iconsminds-building d-block" style="font-size: 2rem"></i>
+                            <span>Строительство</span>
+                        </a>
+
+                        <a href="https://mosecom.mos.ru/karta-profilemerov/" target="_blank" id="prof" class="col icon-menu-item">
+                            <i class="iconsminds-dashboard d-block" style="font-size: 2rem"></i>
+                            <span>Профилемеры</span>
+                        </a>
+                    </div>
+                    <div class="row" align="center">
+                        <a id="prom" href="#" class="col icon-menu-ite">
+                            <i class="iconsminds-power-station d-block" style="font-size: 2rem"></i>
+                            <span>Промышленность</span>
+                        </a>
+
+                        <a href="#" id="weather-btn" class="col icon-menu-item">
+                            <i class="iconsminds-cloud-weather d-block" style="font-size: 2rem"></i>
+                            <span>Погода</span>
+                        </a>
+                    </div>
+
+                    <div class="form-group mt-2" id="veva">
+                        <label class="mt-4">Вещества в воздухе</label>
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr class="odd">
+                                <th scope="row"><span class="badge badge-secondary mr-2">CO</span></th>
+                                <td colspan="2">Оксид углерода</td>
+                                <td>0.002</td>
+                            </tr>
+                            <tr class="even">
+                                <th scope="row"><span class="badge badge-secondary mr-2">NO</span></th>
+                                <td colspan="2">Оксид азота (II)</td>
+                                <td>0.002</td>
+                            </tr>
+                            <tr class="odd">
+                                <th scope="row"><span class="badge badge-secondary mr-2">NO2</span></th>
+                                <td colspan="2">Оксид азота (IV)</td>
+                                <td>0.002</td>
+                            </tr>
+                            <tr class="even">
+                                <th scope="row"><span class="badge badge-secondary mr-2">PM10</span></th>
+                                <td colspan="2">PM10</td>
+                                <td>0.01</td>
+                            </tr>
+                            <tr class="even">
+                                <th scope="row"><span class="badge badge-secondary mr-2">PM2.5</span></th>
+                                <td colspan="2">PM2.5</td>
+                                <td>0.001</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-group mt-2" style="display: none" id="wthr">
+                        <label>Погода по</label>
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr role="row" class="odd">
+                                <td>
+                                    <p id="temp" class="list-item-heading filter p-1"><span
+                                            class="badge badge-secondary mr-2">temp</span>Температура</p>
+                                </td>
+                            </tr>
+                            <tr role="row" class="even">
+                                <td>
+                                    <p id="pressure" class="list-item-heading filter p-1"><span
+                                            class="badge badge-secondary mr-2">pressure</span>Давление</p>
+                                </td>
+                            </tr>
+                            <tr role="row" class="odd">
+                                <td>
+                                    <p id="humidity" class="list-item-heading p-1 filter"><span
+                                            class="badge badge-secondary mr-2">humidity</span>Влажность</p>
+
+                                </td>
+                            </tr>
+                            <tr role="row" class="even">
+                                <td>
+                                    <p id="precipitation" class="list-item-heading filter p-1"><span
+                                            class="badge badge-secondary mr-2">precipitation</span>Осадки</p>
+
+                                </td>
+                            </tr>
+                            <tr role="row" class="even">
+                                <td>
+                                    <p id="speed" class="list-item-heading filter p-1"><span
+                                            class="badge badge-secondary mr-2">wind</span>Ветер</p>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary"
+                            data-dismiss="modal">Отмена
+                    </button>
+                    <button type="button" class="btn btn-primary">Применить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<footer class="page-footer">
+    <div class="footer-content">
+        <div class="container-fluid">
+            <div class="row sha">
+                <div class="col-12 col-sm-6">
+                    <a href="https://startrekteam.ru/">
+                        <p class="mb-0 text-muted"><img src="{% static 'logos/logoStarTrek.svg' %}"
+                                                        style="height: 50px;">StarTrek Team 2021</p>
+                    </a>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                    <ul class="list-unstyled pt-0 pr-0 float-right">
+                        <li class=" mb-0">
+                            <p href="#" class="" style="line-height: 0">Телефон: 8 (988) 888 14 37</p>
+                        </li>
+                        <li class=" mb-0">
+                            <p href="#" class="" style="line-height: 0">Email: startrekteam@mail.ru</p>
+                        </li>
+                        <li class=" mb-0">
+                            <p href="#" class="" style="line-height: 0">Фактический адрес: г. Санкт-Петербург</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% block script %}
+    <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/chartjs-plugin-datalabels.js' %}"></script>
+    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script src="{% static 'js/vendor/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'js/vendor/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/progressbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/vendor/Sortable.js' %}"></script>
+    <script src="{% static 'js/vendor/mousetrap.min.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            let document_ht = window.innerHeight;
+            let map_ht = document_ht - 100;
+            $('#map').css('height', map_ht);
+        });
+
+    </script>
+
+    {# MAPBOX #}
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v1.0.0/mapbox-gl-language.js'></script>
+
+    <script type="text/javascript">
+        jQuery(function () {
+
+            var prom =
+            {{ prom|safe }}
+            var build =
+            {{ build|safe }}
+            var apiKey = "c053d5ae05234ab2a5b1adb9d9157932"; // Your BreezoMeter API key
+            var mapBoxAccessToken = "pk.eyJ1IjoiZndlZHNmIiwiYSI6ImNrdW51eHU1ZzFyMjAycHJ2cHR1b3lqOGcifQ.gI7aoa75R-B_PY9sKSdNlQ"; // your mapbox access token from: https://account.mapbox.com
+            mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
+            var apiWeather = "f3aabf02ac4cec5bf09c6940ff8cc397"
+            var errorMessageBrz =
+                "Update the variable 'apiKey' with a BreezoMeter API key to see the tiles. Contact BreezoMeter if you need any help:    breezometer.com/contact-us";
+            var errorMessageMapbox =
+                "Update the variable 'mapBoxAccessToken' with a Mapbox Access Token to initialize the Mapbox SDK. You can get it from:                https://account.mapbox.com";
+
+            if (apiKey === "") alert(errorMessageBrz);
+            if (mapBoxAccessToken === "") alert(errorMessageMapbox);
+            var map = new mapboxgl.Map({
+                container: "map",
+                style: "mapbox://styles/mapbox/streets-v11", // your stylesheet location
+                center: [37.623856, 55.751574], // starting position [lng, lat]
+                zoom: 10, // starting zoom
+                pitch: 45,
+                doubleClickZoom: false,
+                bearing: 0,
+                accessToken: mapBoxAccessToken
+            });
+
+            var nav = new mapboxgl.NavigationControl({
+                showCompass: true,
+                showZoom: true
+            });
+            const language = new MapboxLanguage();
+            map.addControl(language);
+
+            map.addControl(nav, 'bottom-right');
+
+            map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left'); // full screen
+
+
+            const deltaDistance = 100;
+
+// degrees the map rotates when the left or right arrow is clicked
+            const deltaDegrees = 25;
+
+            function easing(t) {
+                return t * (2 - t);
+            }
+
+            {#  map on load #}
+            map.on("load", function () {
+                    addRasterSource();
+                    addRasterLayer();
+                    addPopulLayer();
+                    addTempLayer();
+                    addPALayer();
+                    addWNDLayer();
+                    addPRLayer();
+                    addHumLayer();
+                    addRoadsSource();
+                    addRoadsLayer();
+
+                    map.setLayoutProperty('popul', 'visibility', 'none');
+
+
+                    {#  draw 3d build #}
+                    const layers = map.getStyle().layers;
+                    const labelLayerId = layers.find(
+                        (layer) => layer.type === 'symbol' && layer.layout['text-field']
+                    ).id;
+                    map.addLayer(
+                        {
+                            'id': 'add-3d-buildings',
+                            'source': 'composite',
+                            'source-layer': 'building',
+                            'filter': ['==', 'extrude', 'true'],
+                            'type': 'fill-extrusion',
+                            'minzoom': 10,
+                            'paint': {
+                                'fill-extrusion-color': '#777777',
+
+// Use an 'interpolate' expression to
+// add a smooth transition effect to
+// the buildings as the user zooms in.
+                                'fill-extrusion-height': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    15,
+                                    0,
+                                    15.05,
+                                    ['get', 'height']
+                                ],
+                                'fill-extrusion-base': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    15,
+                                    0,
+                                    15.05,
+                                    ['get', 'min_height']
+                                ],
+                                'fill-extrusion-opacity': 0.6
+                            }
+                        },
+                        labelLayerId
+                    );
+
+                    {# end draw 3d build  #}
+
+                    {#                custom play#}
+
+                    map.getCanvas().focus();
+
+                    map.getCanvas().addEventListener(
+                        'keydown',
+                        (e) => {
+                            e.preventDefault();
+                            if (e.which === 38) {
+// up
+                                map.panBy([0, -deltaDistance], {
+                                    easing: easing
+                                });
+                            } else if (e.which === 40) {
+// down
+                                map.panBy([0, deltaDistance], {
+                                    easing: easing
+                                });
+                            } else if (e.which === 37) {
+// left
+                                map.easeTo({
+                                    bearing: map.getBearing() - deltaDegrees,
+                                    easing: easing
+                                });
+                            } else if (e.which === 39) {
+// right
+                                map.easeTo({
+                                    bearing: map.getBearing() + deltaDegrees,
+                                    easing: easing
+                                });
+                            }
+                        },
+                        true
+                    );
+
+                    {#  end custom play#}
+
+                    var weather = ['temp', 'precipitation', 'pressure', 'speed', 'humidity']
+                    for (const i of weather) {
+                        map.setLayoutProperty(i, 'visibility', 'none');
+                    }
+
+
+                    $('#weather-btn').click(function () {
+                        let vivsible = map.getLayoutProperty('temp', 'visibility');
+                        if (vivsible === 'visible' || typeof vivsible === 'undefined') {
+                            map.setLayoutProperty('temp', 'visibility', 'none');
+                            $('#temp').removeClass('shadow-lg');
+                            map.setLayoutProperty('breez', 'visibility', 'visible');
+                            $('#veva').show();
+                            $('#breez').addClass('activ');
+                            $(this).removeClass('activ');
+                            $('#wthr').hide();
+                        } else {
+                            map.setLayoutProperty('temp', 'visibility', 'visible');
+                            map.setLayoutProperty('breez', 'visibility', 'none');
+                            $('#temp').addClass('shadow-lg');
+                            $('#veva').hide();
+                            $('#wthr').show();
+                            $('#breez').removeClass('activ');
+                            $(this).addClass('activ');
+                        }
+                    });
+
+                    $('#prom').click(function () {
+                        $('.prom').each(function () {
+                            if ($(this).is(':visible')) {
+                                $(this).hide(800);
+                                $('#prom').removeClass('activ');
+                            } else {
+                                $(this).show(800);
+                                $('#prom').addClass('activ');
+                            }
+                        });
+                    });
+
+                    $('#popul').click(function () {
+                        let vivsible = map.getLayoutProperty('popul', 'visibility');
+                        if (vivsible === 'visible' || typeof vivsible === 'undefined') {
+                            map.setLayoutProperty('popul', 'visibility', 'none');
+                            $(this).removeClass('activ');
+                        } else {
+                            map.setLayoutProperty('popul', 'visibility', 'visible');
+                            $(this).addClass('activ');
+                        }
+                    });
+
+                    $('#car').click(function () {
+                        let vivsible = map.getLayoutProperty('car', 'visibility');
+                        if (vivsible === 'visible' || typeof vivsible === 'undefined') {
+                            map.setLayoutProperty('car', 'visibility', 'none');
+                            $(this).removeClass('activ');
+                        } else {
+                            map.setLayoutProperty('car', 'visibility', 'visible');
+                            $(this).addClass('activ');
+                        }
+                    });
+
+                    $('.filter').click(function () {
+                        console.log($(this).attr('id'));
+                        let vivsible = map.getLayoutProperty($(this).attr('id'), 'visibility');
+                        if (vivsible === 'visible' || typeof vivsible === 'undefined') {
+                            for (const i of weather) {
+                                map.setLayoutProperty(i, 'visibility', 'none');
+                                $(this).removeClass('shadow-lg');
+                            }
+
+                        } else {
+                            for (const i of weather) {
+                                if (i == $(this).attr('id')) {
+                                    map.setLayoutProperty(i, 'visibility', 'visible');
+                                    $(this).addClass('shadow-lg');
+                                } else {
+                                    map.setLayoutProperty(i, 'visibility', 'none');
+                                    $('#' + i).removeClass('shadow-lg');
+                                }
+                            }
+                        }
+                    });
+                    $('#station').click(function () {
+                        $('.station').each(function () {
+                            if ($(this).is(':visible')) {
+                                $(this).hide(800);
+                                $('#station').removeClass('activ');
+                            } else {
+                                $(this).show(800);
+                                $('#station').addClass('activ');
+                            }
+                        });
+                    });
+
+                    $('#build').click(function () {
+                        $('.build').each(function () {
+                            if ($(this).is(':visible')) {
+                                $(this).hide(800);
+                                $('#build').removeClass('activ');
+                            } else {
+                                $(this).show(800);
+                                $('#build').addClass('activ');
+                            }
+                        });
+                    });
+
+
+                    $('#breez').click(function () {
+                        let vivsible = map.getLayoutProperty('breez', 'visibility');
+                        if (vivsible === 'visible' || typeof vivsible === 'undefined') {
+                            map.setLayoutProperty('breez', 'visibility', 'none');
+                            $(this).removeClass('activ');
+
+                        } else {
+                            map.setLayoutProperty('breez', 'visibility', 'visible');
+                            $('#veva').show();
+                            $(this).addClass('activ');
+                            $('#weather-btn').removeClass('activ');
+                            $('#wthr').hide();
+                            for (const i of weather) {
+                                $('#' + id).removeClass('shadow-lg');
+                                map.setLayoutProperty('temp', 'visibility', 'none');
+                            }
+
+                        }
+                    });
+
+                    {#rotateCamera(100);#}
+                }
+            );
+
+
+            {# end map on load #}
+
+
+            function rotateCamera(timestamp) {
+// clamp the rotation between 0 -360 degrees
+// Divide timestamp by 100 to slow rotation to ~10 degrees / sec
+                map.rotateTo((timestamp / 100) % 360, {duration: 0});
+// Request the next frame of the animation.
+                requestAnimationFrame(rotateCamera);
+            }
+
+
+            {# set station #}
+
+            let data = {{ data|safe }};
+            for (const {geometry, properties} of data.features) {
+                let el = document.createElement('div');
+                el.className = 'marker station';
+                el.id = "popus" + properties.id;
+                new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(properties.html)
+                ).addTo(map);
+            }
+
+            {#  end set station #}
+
+
+            {#            set prom#}
+
+            for (const {geometry, properties} of prom.features) {
+                let el = document.createElement('div');
+                el.className = 'marker prom';
+                el.id = "prom" + properties.id;
+                el.style.display = 'none';
+                new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(`<h1>${properties.title}</h1><hr/><p>${properties.discript}</p><hr/><p>${properties.ind}</p><hr/><p>${properties.phone}</p><hr/><p>${properties.email}</p><hr/><a href="/report/${properties.id}" class="btn btn-danger">Пожаловаться</a>`)
+                ).addTo(map);
+            }
+
+            {#  end set prom#}
+
+
+            {#            set build #}
+
+            for (const {geometry, properties} of build.features) {
+                let el = document.createElement('div');
+                el.className = 'marker build';
+                el.id = "build" + properties.id;
+                el.style.display = 'none';
+                new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(`<h1><a href="${properties.url}" >${properties.title}</a></h1><hr/><p>${properties.address}</p><hr/><p>${properties.ind}</p>`)
+                ).addTo(map);
+            }
+
+            {#            end set build#}
+
+            map.on('dblclick', function (e) {
+                const coord = [e.lngLat.lng, e.lngLat.lat];
+                console.log(e);
+                $.ajax({
+                    url: `https://api.breezometer.com/air-quality/v2/current-conditions?lat=${e.lngLat.lat}&lon=${e.lngLat.lng}&key=${apiKey}&features=breezometer_aqi,pollutants_concentrations&lang=ru`,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data);
+                        new mapboxgl.Popup()
+                            .setLngLat(coord)
+                            .setHTML(`<h1>${data.data.indexes.baqi.aqi_display}%</h1><p>${data.data.indexes.baqi.dominant_pollutant}</p><p>${data.data.indexes.baqi.category}</p>`)
+                            .addTo(map);
+                    }
+                });
+            });
+
+
+            map.on('mouseenter', 'prom', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'prom', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            {#  end set prom #}
+
+            {# weather#}
+
+            function addTempLayer() {
+                map.addLayer({
+                    "id": "temp",
+                    "type": "raster",
+                    "source": {
+                        "type": "raster",
+                        "tiles": [`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiWeather}`],
+                        "tileSize": 256
+                    },
+                    "minzoom": 0,
+                    "maxzoom": 22
+                });
+            }
+
+
+            function addPALayer() {
+                map.addLayer({
+                    "id": "pressure",
+                    "type": "raster",
+                    "source": {
+                        "type": "raster",
+                        "tiles": [`https://tile.openweathermap.org/map/pressure_new/{z}/{x}/{y}.png?appid=${apiWeather}`],
+                        "tileSize": 256
+                    },
+                    "minzoom": 0,
+                    "maxzoom": 22
+                });
+            }
+
+            function addWNDLayer() {
+                map.addLayer({
+                    "id": "speed",
+                    "type": "raster",
+                    "source": {
+                        "type": "raster",
+                        "tiles": [`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${apiWeather}`],
+                        "tileSize": 256
+                    },
+                    "minzoom": 0,
+                    "maxzoom": 22
+                });
+            }
+
+            function addPRLayer() {
+                map.addLayer({
+                    "id": "precipitation",
+                    "type": "raster",
+                    "source": {
+                        "type": "raster",
+                        "tiles": [`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${apiWeather}`],
+                        "tileSize": 256
+                    },
+                    "minzoom": 0,
+                    "maxzoom": 22
+                });
+            }
+
+            function addHumLayer() {
+                map.addLayer({
+                    "id": "humidity",
+                    "type": "raster",
+                    "source": {
+                        "type": "raster",
+                        "tiles": [`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${apiWeather}`],
+                        "tileSize": 256
+                    },
+                    "minzoom": 0,
+                    "maxzoom": 22
+                });
+            }
+
+            {#  end weather #}
+
+
+
+
+            {#            quality #}
+
+            function addRasterSource() {
+                map.addSource("breezometer-tiles", {
+                    type: "raster",
+                    tiles: [
+                        `https://tiles.breezometer.com/v1/air-quality/breezometer-aqi/current-conditions/{z}/{x}/{y}.png?key=${apiKey}&breezometer_aqi_color=indiper`
+                    ],
+                    tileSize: 256,
+                    maxzoom: 12
+                });
+            }
+
+            function addRasterLayer() {
+                map.addLayer(
+                    {
+                        id: "breez",
+                        type: "raster",
+                        source: "breezometer-tiles",
+                        minzoom: 0,
+                        maxzoom: 22,
+                        paint: {
+                            "raster-opacity": 0.6
+                        }
+                    },
+                    "admin-1-boundary-bg"
+                );
+            }
+
+
+            {#  end quality  #}
+
+
+
+            {#            road    #}
+
+            function addRoadsSource() {
+                map.addSource("roads", {
+                    type: "vector",
+                    tiles: [
+                        `https://tiles.breezometer.com/v1/air-quality/traffic-pollution/current-conditions/{z}/{x}/{y}.pbf?key=${apiKey}`
+                    ],
+                    minzoom: 0,
+                    maxzoom: 10
+                });
+            }
+
+            function addRoadsLayer() {
+                map.addLayer(
+                    {
+                        id: "car",
+                        source: "roads",
+                        "source-layer": "brz-roads",
+                        type: "line",
+                        layout: {
+                            "line-cap": "round"
+                        },
+                        paint: {
+                            'line-color': [
+                                'interpolate',
+                                ['linear'],
+                                ['get', 'baqi'],
+                                20,
+                                '#723122',
+                                30,
+                                '#8B4225',
+                                40,
+                                '#A25626',
+                                50,
+                                '#B86B25',
+                                60,
+                                '#CA8323',
+                                70,
+                                '#DA9C20',
+                                80,
+                                '#E6B71E',
+                                90,
+                                '#EED322',
+                                100,
+                                '#F2F12D'
+                            ],
+                            'line-width': [
+                                'interpolate',
+                                ['linear'],
+                                ['get', 'road_width'],
+                                1,
+                                5,
+                                2,
+                                4,
+                                3,
+                                3,
+                                4,
+                                2,
+                                5,
+                                1,
+                            ]
+                        },
+                        minzoom: 3,
+                        maxzoom: 24
+                    },
+                    "admin-1-boundary-bg"
+                );
+            }
+
+
+            {#  end road  #}
+
+            {#             popul layer#}
+
+            function addPopulLayer() {
+                map.addLayer({
+                    "id": "popul",
+                    "type": "fill-extrusion",
+                    "source": {
+                        "type": "vector",
+                        "url": 'mapbox://blukky.0c79uqwb'
+                    },
+                    'source-layer': 'output_1k',
+                    "minzoom": 0,
+                    "maxzoom": 22,
+                    'paint': {
+                        'fill-extrusion-height': [
+                            "interpolate",
+                            ["linear"],
+                            ["get", "DN"],
+                            1,
+                            20,
+                            105749,
+                            500000,
+                            422995,
+                            1500000
+                        ],
+                        'fill-extrusion-color': [
+                            "interpolate",
+                            ["linear"],
+                            ["get", "DN"],
+                            1,
+                            "hsl(74, 70%, 96%)",
+                            500,
+                            "hsl(132, 35%, 73%)",
+                            1000,
+                            "hsl(167, 85%, 31%)",
+                            5000,
+                            "hsl(228, 66%, 25%)",
+                            10000,
+                            "hsl(256, 66%, 25%)",
+                            211498,
+                            "hsl(256, 56%, 8%)"
+                        ],
+                        'fill-extrusion-opacity': 0.6
+                    }
+
+                });
+            }
+
+            {#            end popul layer#}
+
+            $('.marker.station').click(function (e) {
+                console.log(e);
+                for (const {geometry, properties} of data.features) {
+                    if ('popus' + properties.id === $(this).attr('id')) {
+                        map.flyTo({
+                            center: geometry.coordinates,
+                            zoom: 18,
+                            pitch: 45
+                        });
+                    }
+                }
+            });
+
+            $('.marker.prom').click(function (e) {
+                console.log(e);
+                for (const {geometry, properties} of prom.features) {
+                    if ('prom' + properties.id === $(this).attr('id')) {
+                        map.flyTo({
+                            center: geometry.coordinates,
+                            zoom: 18,
+                            pitch: 45
+                        });
+                    }
+                }
+            });
+
+            $('.marker.build').click(function (e) {
+                console.log(e);
+                for (const {geometry, properties} of prom.features) {
+                    if ('build' + properties.id === $(this).attr('id')) {
+                        map.flyTo({
+                            center: geometry.coordinates,
+                            zoom: 18,
+                            pitch: 45
+                        });
+                    }
+                }
+            });
+
+            $('body').click(function (e) {
+                var div = $('#exampleModalRight');
+                if (!$('.modal-dialog').is(e.target) && $('.modal-dialog').has(e.target).length === 0) {
+                    $('button.close').trigger('click');
+                }
+                $('#confirm').click(() => $('button.close').trigger('click'));
+            });
+        });
+
+    </script>
+{% endblock %}
+</body>
+
+
+</html>

@@ -1,0 +1,183 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block filtr %}{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/timeline2.css' %}"/>
+    <style type="text/css">
+        .station {
+            background-image: url("{% static "img/data.svg" %}");
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .activation {
+            border: 1px solid rgba(0,0,0,0.5);
+            box-shadow: 0 0 10px black;
+        }
+    </style>
+    <div class="menu">
+        <div class="main-menu">
+            <div class="scroll">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="{% url 'map' %}">{# #dashboard #}
+                            <i class="simple-icon-map"></i>
+                            <span>Карта контроля</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'statistics' %}">{# #layouts#}
+                            <i class="iconsminds-monitor-analytics"></i> Статистика
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'predict' %}">{# #applications#}
+                            <i class="iconsminds-statistic"></i> Прогноз
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'location' %}">{# #ui#}
+                            <i class="iconsminds-map2"></i> Засечь место
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_model' %}">{# #menu#}
+                            <i class="iconsminds-coding"></i> Создание модели
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'docs' %}">
+                            <i class="iconsminds-library"></i> Информация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="veshestva" style="z-index: 1030; position: absolute; margin-top: 120px; left: 10%; right: 10%">
+        <div class="col mx-auto glide__slide">
+            <a href="#" class="card">
+                <div class="card-body text-center">
+                    {#                    <i class="iconsminds-file-zip"></i>#}
+                    <p class="lead text-center">CO</p>
+                    <p id="co" class="card-text mb-0">0000</p>
+                </div>
+            </a>
+        </div>
+        <div class="col mx-auto glide__slide">
+            <a href="#" class="card">
+                <div class="card-body text-center">
+                    {#                    <i class="iconsminds-file-zip"></i>#}
+                    <p class="lead text-center">NO</p>
+                    <p id="no" class="card-text mb-0">0000</p>
+                </div>
+            </a>
+        </div>
+        <div class="col mx-auto glide__slide">
+            <a href="#" class="card">
+                <div class="card-body text-center">
+                    {#                    <i class="iconsminds-file-zip"></i>#}
+                    <p class="lead text-center">NO2</p>
+                    <p id="no2" class="card-text mb-0">0000</p>
+                </div>
+            </a>
+        </div>
+        <div class="col mx-auto glide__slide">
+            <a href="#" class="card">
+                <div class="card-body text-center">
+                    {#                    <i class="iconsminds-file-zip"></i>#}
+                    <p class="lead text-center">PM10</p>
+                    <p id="pm10" class="card-text mb-0">0000</p>
+                </div>
+            </a>
+        </div>
+        <div class="col mx-auto glide__slide">
+            <a href="#" class="card">
+                <div class="card-body text-center">
+                    {#                    <i class="iconsminds-file-zip"></i>#}
+                    <p class="lead text-center">PM2.5</p>
+                    <p id="pm25" class="card-text mb-0">0000</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {% csrf_token %}
+    <div id="map" style="max-width: 100%; "></div>
+
+    <div class="b-page b-page_type_maps b-page_lang_ru">
+        <div class="weather-maps_timeline_mini ">
+            <div class="weather-maps__loyier-exsist weather-maps__timeline">
+                <div class="timeline timeline_js_inited">
+                    <div class="timeline__current"></div>
+                    <div class="timeline__list">
+                        <div class="timeline__arrow timeline__arrow_direction_left"></div>
+                        <div class=" swiper-container swiper-timeline swiper-container-horizontal swiper-container-free-mode swiper-container-android"
+                             style="">
+                            <div class="animate swiper-wrapper">
+
+                                {% for i in timeline_id %}
+                                    <div class="timeline-item timeline-item_type_wind swiper-slide">
+                                        <div class="timeline-item__time" id="{{ i.1 }}">{{ i.0 }}</div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                        </div>
+                        <div class="timeline__arrow timeline__arrow_direction_right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/chartjs-plugin-datalabels.js' %}"></script>
+    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script src="{% static 'js/vendor/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'js/vendor/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/progressbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/vendor/dateFormat.js' %}"></script>
+    <script src="{% static 'js/vendor/dateFormat.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-dateformat.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery-dateformat.min.js' %}"></script>
+    <script src="{% static 'js/vendor/Sortable.js' %}"></script>
+    <script src="{% static 'js/vendor/mousetrap.min.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/dore.script.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    {# MAPBOX #}
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v1.0.0/mapbox-gl-language.js'></script>
+
+    <script type="text/javascript">
+        var tower =
+        {{ tower|safe }}
+    </script>
+    <script src="{% static 'js/mymapbox.js' %}"></script>
+
+    {#    <script>#}
+    {#    $(document).ready(function () {#}
+    {#            let document_ht = window.innerWidth;#}
+    {#            let map_ht = document_ht - 100 - 48;#}
+    {#            $('#map').css('height', map_ht);#}
+    {#            $('#veshestva').css('margin-top', 120);#}
+    {#        });#}
+    {#    </script>#}
+
+{% endblock %}

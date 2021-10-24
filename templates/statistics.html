@@ -1,0 +1,326 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load poll_extras %}
+{% block filtr %}{% endblock %}
+{% block content %}
+    <div class="menu">
+        <div class="main-menu">
+            <div class="scroll">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="{% url 'map' %}">{# #dashboard #}
+                            <i class="simple-icon-map"></i>
+                            <span>Карта контроля</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'statistics' %}">{# #layouts#}
+                            <i class="iconsminds-monitor-analytics"></i> Статистика
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'predict' %}">{# #applications#}
+                            <i class="iconsminds-statistic"></i> Прогноз
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'location' %}">{# #ui#}
+                            <i class="iconsminds-map2"></i> Засечь место
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'create_model' %}">{# #menu#}
+                            <i class="iconsminds-coding"></i> Создание модели
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'docs' %}">
+                            <i class="iconsminds-library"></i> Информация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="container-fluid">
+            <div class="row  ">
+                <div class="col-12">
+
+                    <h1>Статистика</h1>
+                    <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                        <ol class="breadcrumb pt-0">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'map' %}">Карта контроля</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'predict' %}">Прогноз</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'location' %}">Засечь место</a>
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="separator mb-5"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12 mb-4">
+                    <div class="card dashboard-filled-line-chart">
+                        <div class="card-body ">
+                            <div class="float-left float-none-xs">
+                                <div class="d-inline-block">
+                                    <h5 class="d-inline">Динамика выбросов вредных веществ в атмосферу</h5>
+                                    <span class="text-muted text-small d-block mt-4">Тыс. тонн</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart card-body pt-0">
+                            <canvas id="visitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12 mb-4">
+                    <div class="card dashboard-filled-line-chart">
+                        <div class="card-body ">
+                            <div class="float-left float-none-xs">
+                                <div class="d-inline-block">
+                                    <h5 class="d-inline">Средний показатель CO относительно его ПДК в атмосферном
+                                        воздухе</h5>
+                                    <span class="text-muted text-small d-block mt-4">мг/м3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart card-body pt-0">
+                            <canvas id="conversionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 col-lg-6 col-xl-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Доля объектов загрязнений</h5>
+                            <div class="dashboard-donut-chart chart">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6 col-xl-4 mb-4">
+                    <div class="card h-100 dashboard-progress">
+                        <div class="position-absolute card-top-buttons">
+                            <button class="btn btn-header-light icon-button">
+                                <i class="simple-icon-refresh"></i>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Показатели среды</h5>
+                            <div class="mb-4">
+                                <p class="mb-2">Скорость ветра
+                                    <span class="float-right text-muted">12/18</span>
+                                </p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="mb-2">Давление
+                                    <span class="float-right text-muted">1/8</span>
+                                </p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="15" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="mb-2">Дальность видимости
+                                    <span class="float-right text-muted">2/6</span>
+                                </p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="mb-2">Наличие веществ в воздухе
+                                    <span class="float-right text-muted">0/8</span>
+                                </p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="mb-2">Температура воздуха
+                                    <span class="float-right text-muted">1/2</span>
+                                </p>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0"
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .dashboard-small-chart-analytics {
+                        height: 200px;
+                    }
+                </style>
+                <div class="col-md-12 col-lg-12 col-xl-4">
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <div class="card dashboard-small-chart-analytics">
+                                <div class="card-body h-100">
+                                    <p class="lead color-theme-1 mb-1 value"></p>
+                                    <p class="mb-0 label text-small"></p>
+                                    <div class="chart">
+                                        <canvas id="smallChart1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="card dashboard-small-chart-analytics">
+                                <div class="card-body h-100">
+                                    <p class="lead color-theme-1 mb-1 value"></p>
+                                    <p class="mb-0 label text-small"></p>
+                                    <div class="chart">
+                                        <canvas id="smallChart2"></canvas>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="card dashboard-small-chart-analytics">
+                                <div class="card-body h-100">
+                                    <p class="lead color-theme-1 mb-1 value"></p>
+                                    <p class="mb-0 label text-small"></p>
+                                    <div class="chart">
+                                        <canvas id="smallChart3"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <div class="card dashboard-small-chart-analytics">
+                                <div class="card-body h-100">
+                                    <p class="lead color-theme-1 mb-1 value"></p>
+                                    <p class="mb-0 label text-small"></p>
+                                    <div class="chart">
+                                        <canvas id="smallChart4"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row mb-4">
+                <div class="col-12 data-tables-hide-filter">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <table class="data-table data-tables-pagination responsive nowrap"
+                                   data-order="[[ 1, &quot;desc&quot; ]]">
+                                <thead>
+                                <tr>
+                                    <th>Название предприятия</th>
+                                    <th>Индекс</th>
+                                    <th>Адрес</th>
+                                    <th>Телефон</th>
+                                    <th>Почта</th>
+                                    <th>Широта</th>
+                                    <th>Долгота</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in ind %}
+                                    <tr>
+                                        <td>
+                                            <p class="list-item-heading">{{ item.name }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.index }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.address }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.phone }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.email }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.lat }}</p>
+                                        </td>
+                                        <td>
+                                            <p class="text-muted">{{ item.lon }}</p>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        var label =
+        {{ label|safe }}
+        var co =
+        {{ co|safe }}
+        var no2 =
+        {{ no2|safe }}
+        var no =
+        {{ no|safe }}
+        var pm10 =
+        {{ pm10|safe }}
+        var pm25 =
+        {{ pm25|safe }}
+    </script>
+
+    <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendor/chartjs-plugin-datalabels.js' %}"></script>
+    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script src="{% static 'js/vendor/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/datatables.min.js' %}"></script>
+    <script src="{% static 'js/vendor/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/progressbar.min.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.barrating.min.js' %}"></script>
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/vendor/Sortable.js' %}"></script>
+    <script src="{% static 'js/vendor/mousetrap.min.js' %}"></script>
+    <script src="{% static 'js/startrek.script.js' %}"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,340 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'font/iconsmind-s/css/iconsminds.css' %}" />
+    <link rel="stylesheet" href="{% static 'font/simple-line-icons/css/simple-line-icons.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.rtl.only.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-float-label.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/dropzone.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/smart_wizard.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-tagsinput.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor/component-custom-switch.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+{% endblock %}
+
+{% block filtr %}{% endblock %}
+{% block content %}
+    <div class="menu">
+        <div class="main-menu">
+            <div class="scroll">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="{% url 'map' %}">{# #dashboard #}
+                            <i class="simple-icon-map"></i>
+                            <span>Карта контроля</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'statistics' %}">{# #layouts#}
+                            <i class="iconsminds-monitor-analytics"></i> Статистика
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'predict' %}">{# #applications#}
+                            <i class="iconsminds-statistic"></i> Прогноз
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'location' %}">{# #ui#}
+                            <i class="iconsminds-map2"></i> Засечь место
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'create_model' %}">{# #menu#}
+                            <i class="iconsminds-coding"></i> Создание модели
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'docs' %}">
+                            <i class="iconsminds-library"></i> Информация
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <main>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Моделирование своей нейронной сети</h1>
+                    <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                        <ol class="breadcrumb pt-0">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'map' %}">Карта контроля</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'predict' %}">Прогноз</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'location' %}">Засечь место</a>
+                            </li>
+                        </ol>
+                    </nav>
+                    <div class="separator mb-5"></div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div id="smartWizardCheck">
+                            <ul class="card-header">
+                                <li><a href="#checkStep1">Шаг 1<br /><small>Выбор типа нейронной сети</small></a></li>
+                                <li><a href="#checkStep2">Шаг 2<br /><small>Выбор количества слоев</small></a></li>
+                                <li><a href="#checkStep3">Шаг 3<br /><small>Что будем делать?</small></a></li>
+                                <li><a href="#checkStep4">Шаг 4<br /><small>Входные данные</small></a></li>
+                                <li><a href="#checkStep5">Шаг 5<br /><small>Результат работы</small></a></li>
+                            </ul>
+
+                            <div class="card-body">
+                                <div id="checkStep1">
+                                    <h4 class="pb-2">Шаг 1: Нейросети - это не сложно</h4>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="col-md-12 col-lg-12 mb-4">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Полносвязная нейросеть</h5>
+                                                            <img src="{% static 'img/neural/dff/dff2.svg' %}" id="dffq" style="height: 140px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="col-md-12 col-lg-12 mb-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Сверточная нейросеть</h5>
+                                                        <img src="{% static 'img/neural/dnc/dnc2.svg' %}" id="dffq" style="height: 140px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="col-md-12 col-lg-12 mb-4">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Рекурентная нейросеть</h5>
+                                                        <img src="{% static 'img/neural/rnn/rnn2.svg' %}" id="dffq" style="height: 140px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-4">Подходит для обычной классификации и регрессии
+                                            </div>
+                                        <div class="col-4">Нужна для классификации картинок, звука, все что имеет трехмерную мерную размерность (высота, ширина, глубина)
+                                            </div>
+                                        <div class="col-4">Умеет предсказывать слова, символы, классификацировать тексты, работает с временными рядами
+                                            </div>
+                                    </div>
+
+                                    <div class="row mt-4" align="center">
+                                        <div class="col-4">
+                                            <button type="button"
+                                                    class="btn btn-secondary btn-lg mb-1 mb-4 sw-btn-next" id="btn_dff">ВЫБРАТЬ ПОЛНОСВЯЗНУЮ НЕЙРОСЕТЬ
+                                            </button>
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="button"
+                                                    class="btn btn-secondary btn-lg mb-1 mb-4 sw-btn-next" id="btn_dnc">ВЫБРАТЬ СВЕРТОЧНУЮ НЕЙРОСЕТЬ
+                                            </button>
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="button"
+                                                    class="btn btn-secondary btn-lg mb-1 mb-4 sw-btn-next" id="btn_rnn">ВЫБРАТЬ РЕКУРЕНТНУЮ НЕЙРОСЕТЬ
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div id="checkStep2">
+                                    <h4 class="pb-2">Шаг 2: Количество слоев</h4>
+                                    <div>Построение нейронных сетей - дело творческое. Универсального ответа сколько необходимо слоев нет. Мы можем Вам порекомендовать для полносвязной сети 5-6 слоев, для сверхточной 3-4 и для рекуррентной 2-3 слоя. Это оптимальные значения.
+                                    </div>
+                                    <div class=" fc fc-bootstrap4 fc-ltr">
+                                        <div class="fc-toolbar fc-header-toolbar">
+{#                                            <div class="fc-left"><h4>Количество слоев</h4></div>#}
+                                            <div class="fc-right mt-2">
+                                                <div class="btn-group">
+                                                    <h4 class="mr-2 mt-1">Количество слоев</h4>
+                                                    <button id="btn_minus" type="button"
+                                                            class="fc-prev-button btn btn-primary"
+                                                            aria-label="prev"><span
+                                                            class="fa fa- simple-icon-arrow-left"></span></button>
+                                                    <h2 id="num" style="padding-right: 6px">1</h2>
+                                                    <button id="btn_pluss" type="button"
+                                                            class="fc-next-button btn btn-primary"
+                                                            aria-label="next"><span
+                                                            class="fa fa- simple-icon-arrow-right"></span></button>
+                                                </div>
+                                            </div>
+                                            <div class="fc-center"></div>
+                                            <div class="fc-clear"></div>
+                                            <img src="{% static 'img/neural/dff/dff1s2.svg' %}" id="img_neuros2" style="height: 200px">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="checkStep3">
+                                    <h4 class="pb-2">Шаг 3: Что будем делать?</h4>
+                                    <div>Регрессия - это если мы хотим что-то предсказать.
+                                        Классификация - это когда нужно отнести объект к какому-то классу.
+                                        <div class="row mt-4">
+                                            <img class="col-12 mb-3" src="{% static 'img/neural/dff/dff1s2.svg' %}" id="img_neuro"
+                                                 style="height: 200px">
+                                            <div class="col-6" align="right">
+                                                <button type="button"
+                                                        class="btn btn-secondary btn-lg mb-1 mb-4 sw-btn-next" id="btn_"
+                                                        style="height: 100px">РЕГРЕССИЯ
+                                                </button>
+                                            </div>
+                                            <div class="col-6" align="left">
+                                                <button type="button"
+                                                        class="btn btn-secondary btn-lg mb-1 mb-4 sw-btn-next" id="btn_"
+                                                        style="height: 100px">КЛАССИФИКАЦИЯ
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="checkStep4">
+                                    <h4 class="pb-2">Шаг 4: Загрузка входных файлов</h4>
+                                    <div class="mb-3">Загрузите необходимые входные данные согласно документации</div>
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <h5 class="mb-4">Зона загрузки файлов</h5>
+                                            <div class="row">
+                                                {% csrf_token %}
+                                            <form class="col-6" action="/file-upload">
+                                                <div>Признаки объектов:</div>
+                                                    <div class="dropzone" id="features">
+                                                    </div>
+                                            </form>
+                                            <form class="col-6" action="/file-upload">
+                                                <div>Ожидаемые ответы:</div>
+                                                    <div class="dropzone" id="answer">
+                                                    </div>
+                                            </form>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="checkStep5">
+                                    <h4 class="pb-2">Шаг 5: Результат</h4>
+                                    <div>
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0">Качество модели</h6>
+                                            <div role="progressbar" id="grafik" class="progress-bar-circle position-relative"
+                                                 data-color="#922c88"
+                                                 data-trailColor="#d7d7d7" aria-valuemax="100" aria-valuenow="0"
+                                                 data-show-percent="true">
+                                            </div>
+                                            <div id="name_model"></div>
+                                            <div id="cancel" class="btn btn-danger">Удалить</div>
+                                            <div id="save" download="maybe.h5" class="btn btn-success">Сохранить</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+    </main>
+
+    {% block script %}
+
+        <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'js/vendor/dropzone.min.js' %}"></script>
+        <script src="{% static 'js/vendor/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'js/vendor/perfect-scrollbar.min.js' %}"></script>
+        <script src="{% static 'js/vendor/bootstrap-tagsinput.min.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.smartWizard.min.js' %}"></script>
+        <script src="{% static 'js/vendor/progressbar.min.js' %}"></script>
+        <script>
+            let timer = setTimeout(() => {  $("#sw-btn-group").before(' <h4 class="mr-2 mt-1">Не знаете что выбрать? Нажмите далее для выбора по умолчанию</h4>') }, 5000);
+        </script>
+        <script src="{% static 'js/vendor/jquery.validate/jquery.validate.min.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.validate/additional-methods.min.js' %}"></script>
+        <script src="{% static 'js/startrek.script.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
+
+         <script>
+            $(document).ready(function () {
+                let n = 1;
+                let path = 'static/img/neural/'
+                let neuro = ''
+                let new_path = path + neuro + n + 's2.svg'
+                let step3_path = path + neuro + n + 's2.svg'
+                $('#btn_dff').click(function () {
+                    n = 1
+                    $("#num").text(n);
+                    neuro = "dff/dff"
+                    new_path = path + neuro + n + 's2.svg'
+                    $("#img_neuros2").attr('src', new_path);
+                });
+                $('#btn_dnc').click(function () {
+                    n = 1
+                    $("#num").text(n);
+                    neuro = "dnc/dnc"
+                    new_path = path + neuro + n + 's2.svg'
+                    $("#img_neuros2").attr('src', new_path);
+                });
+                $('#btn_rnn').click(function () {
+                    n = 1
+                    $("#num").text(n);
+                    neuro = "rnn/rnn"
+                    new_path = path + neuro + n + 's2.svg'
+                    $("#img_neuros2").attr('src', new_path);
+                });
+
+                $('#btn_pluss').click(function () {
+                    if (n === 6) {
+                        n = 5
+                    }
+                    n = n + 1;
+                    new_path = path + neuro + n + 's2.svg'
+                    step3_path = path + neuro + n + '.svg'
+                    $("#img_neuros2").fadeOut(100);
+                    setTimeout(() => {  $("#img_neuros2").attr('src', new_path) }, 100);
+                    setTimeout(() => {  $("#img_neuros2").fadeIn(500); }, 100);
+                    $("#img_neuro").attr('src', step3_path);
+                    $("#num").text(n);
+                });
+                $('#btn_minus').click(function () {
+                    if (n === 1) {
+                        n = 2
+                    }
+                    n = n - 1;
+                    new_path = path + neuro + n + 's2.svg'
+                    step3_path = path + neuro + n + '.svg'
+                    $("#img_neuros2").fadeOut(100);
+                    setTimeout(() => {  $("#img_neuros2").attr('src', new_path) }, 100);
+                    setTimeout(() => {  $("#img_neuros2").fadeIn(500); }, 100);
+                    $("#img_neuro").attr('src', step3_path);
+                    $("#num").text(n);
+                });
+            });
+        </script>
+        <script src="{% static 'js/model.js' %}"></script>
+    {% endblock %}
+
+{% endblock %}
