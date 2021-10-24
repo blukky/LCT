@@ -719,7 +719,7 @@
                 el.style.display = 'none';
                 new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
-                        .setHTML(`<h1><a href="${properties.url}" >${properties.title}</a></h1><hr/><p>${properties.address}</p><hr/><p>${properties.ind}</p>`)
+                        .setHTML(`<h1><a href="${properties.url}" >${properties.title}</a></h1><hr/><p>${properties.address}</p><hr/><p>${properties.end_year}</p>`)
                 ).addTo(map);
             }
 
