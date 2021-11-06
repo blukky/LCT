@@ -135,3 +135,24 @@ class Prediction(models.Model):
     class Meta:
         verbose_name = 'Предсказание'
         verbose_name_plural = 'Предсказания'
+
+
+class Rubbish(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Название')
+    address = models.CharField(max_length=255, blank=True, null=True, verbose_name='Адрес')
+    S = models.CharField(max_length=255, blank=True, null=True, verbose_name='Площадь (га)')
+    phone = models.CharField(max_length=255, blank=True, null=True, verbose_name='Телефон')
+    email = models.EmailField(max_length=255, blank=True, null=True, verbose_name='Почта')
+    status = models.CharField(max_length=255, blank=True, null=True, verbose_name='Статус')
+    index = models.CharField(max_length=255, blank=True, null=True, verbose_name='Индекс')
+    lat = models.FloatField(verbose_name='Широта')
+    lon = models.FloatField(verbose_name='Долгота')
+
+
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Свалка'
+        verbose_name_plural = 'Свалки'

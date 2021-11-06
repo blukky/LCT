@@ -1,4 +1,6 @@
 import pandas as pd
+import requests
+import math
 import tensorflow.keras as K
 import tensorflow.keras.layers as L
 from tensorflow.keras.models import Sequential as M
@@ -24,142 +26,165 @@ PDK_NO2 = 0.2
 PDK_MP10 = 0.3
 PDK_MP25 = 0.16
 
+modelCO6 = K.models.load_model('LCTmodels/COAllNoTest6HoursSeq1.h5')
+modelNO6 = K.models.load_model('LCTmodels/NOMeteoNoTest6HoursSeq1.h5')
+modelNO26 = K.models.load_model('LCTmodels/NO2MeteoNoTest6HoursSeq1.h5')
+modelPM106 = K.models.load_model('LCTmodels/PM10MeteoNoTest6HoursSeq1.h5')
+modelPM256 = K.models.load_model('LCTmodels/PM25AllNoTest6HoursSeq1.h5')
+modelCO3 = K.models.load_model('LCTmodels/COAllNoTest3HoursSeq1.h5')
+modelNO3 = K.models.load_model('LCTmodels/NOAllNoTest3HoursSeq1.h5')
+modelNO23 = K.models.load_model('LCTmodels/NO2MeteoNoTest3HoursSeq1.h5')
+modelPM103 = K.models.load_model('LCTmodels/PM10MeteoNoTest3HoursSeq1.h5')
+modelPM253 = K.models.load_model('LCTmodels/PM25AllNoTest3HoursSeq1.h5')
+modelCO1 = K.models.load_model('LCTmodels/COAllNoTest1HoursSeq1.h5')
+modelNO1 = K.models.load_model('LCTmodels/NOMeteoNoTest1HoursSeq1.h5')
+modelNO21 = K.models.load_model('LCTmodels/NO2MeteoNoTest1HoursSeq1.h5')
+modelPM101 = K.models.load_model('LCTmodels/PM10AllNoTest1HoursSeq1.h5')
+modelPM251 = K.models.load_model('LCTmodels/PM25MeteoNoTest1HoursSeq1.h5')
+modelCO = K.models.load_model('LCTmodels/COMeteoNoTestSeq1.h5')
+modelNO = K.models.load_model('LCTmodels/NOAllnoTestSeq1.h5')
+modelNO2 = K.models.load_model('LCTmodels/NO2AllNoTestSeq1.h5')
+modelPM10 = K.models.load_model('LCTmodels/PM10MeteoNoTestSeq1.h5')
+modelPM25 = K.models.load_model('LCTmodels/PM25MeteoNotestSeq1.h5')
 
-def predict_CO_6(x): # предсказание СО на 6 часов 
-    model = K.models.load_model('LCTmodels/COAllNoTest6HoursSeq1.h5') # подключение модели
-    pred = model.predict(x) # предсказание
-    return round(pred[0][0], 2) # возврат значение
+
+def predict_CO_6(x):  # предсказание СО на 6 часов
+    # подключение модели
+    pred = modelCO6.predict(x)  # предсказание
+    return round(pred[0][0], 2)  # возврат значение
 
 
-def predict_NO_6(x): # предсказание NO на 6 часов 
-    model = K.models.load_model('LCTmodels/NOMeteoNoTest6HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO_6(x):  # предсказание NO на 6 часов
+
+    pred = modelNO6.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO2_6(x): # предсказание NO2 на 6 часов   (аналогично предыдущим)
-    model = K.models.load_model('LCTmodels/NO2MeteoNoTest6HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO2_6(x):  # предсказание NO2 на 6 часов   (аналогично предыдущим)
+
+    pred = modelNO26.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP10_6(x): # предсказание PM10 на 6 часов 
-    model = K.models.load_model('LCTmodels/PM10MeteoNoTest6HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP10_6(x):  # предсказание PM10 на 6 часов
+
+    pred = modelPM106.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP25_6(x): # предсказание PM2.5 на 6 часов 
-    model = K.models.load_model('LCTmodels/PM25AllNoTest6HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP25_6(x):  # предсказание PM2.5 на 6 часов
+
+    pred = modelPM256.predict(x)
     return round(pred[0][0], 2)
 
 
 def predict_CO_3(x):  # предсказание CO на 3 часов 
-    model = K.models.load_model('LCTmodels/COAllNoTest3HoursSeq1.h5')
-    pred = model.predict(x)
+
+    pred = modelCO3.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO_3(x): # предсказание NO на 3 часов 
-    model = K.models.load_model('LCTmodels/NOAllNoTest3HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO_3(x):  # предсказание NO на 3 часов
+
+    pred = modelNO3.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO2_3(x): # предсказание NO2 на 3 часов 
-    model = K.models.load_model('LCTmodels/NO2MeteoNoTest3HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO2_3(x):  # предсказание NO2 на 3 часов
+
+    pred = modelNO23.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP10_3(x): # предсказание PM10 на 3 часов 
-    model = K.models.load_model('LCTmodels/PM10MeteoNoTest3HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP10_3(x):  # предсказание PM10 на 3 часов
+
+    pred = modelPM103.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP25_3(x): # предсказание PM2.5 на 3 часов 
-    model = K.models.load_model('LCTmodels/PM25AllNoTest3HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP25_3(x):  # предсказание PM2.5 на 3 часов
+
+    pred = modelPM253.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_CO_1(x): # предсказание CO на 1 часов 
-    model = K.models.load_model('LCTmodels/COAllNoTest1HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_CO_1(x):  # предсказание CO на 1 часов
+
+    pred = modelCO1.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO_1(x): # предсказание NO на 1 часов 
-    model = K.models.load_model('LCTmodels/NOMeteoNoTest1HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO_1(x):  # предсказание NO на 1 часов
+
+    pred = modelNO1.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO2_1(x): # предсказание NO2 на 1 часов
-    model = K.models.load_model('LCTmodels/NO2MeteoNoTest1HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_NO2_1(x):  # предсказание NO2 на 1 часов
+
+    pred = modelNO21.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP10_1(x): # предсказание PM10 на 1 часов
-    model = K.models.load_model('LCTmodels/PM10AllNoTest1HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP10_1(x):  # предсказание PM10 на 1 часов
+
+    pred = modelPM101.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP25_1(x): # предсказание PM2.5 на 1 часов
-    model = K.models.load_model('LCTmodels/PM25MeteoNoTest1HoursSeq1.h5')
-    pred = model.predict(x)
+def predict_MP25_1(x):  # предсказание PM2.5 на 1 часов
+
+    pred = modelPM251.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_CO(x): # предсказание CO на 20 минут
-    model = K.models.load_model('LCTmodels/COMeteoNoTestSeq1.h5')
-    pred = model.predict(x)
+def predict_CO(x):  # предсказание CO на 20 минут
+
+    pred = modelCO.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO(x): # предсказание NO на 20 минут
-    model = K.models.load_model('LCTmodels/NOAllnoTestSeq1.h5')
-    pred = model.predict(x)
+def predict_NO(x):  # предсказание NO на 20 минут
+
+    pred = modelNO.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_NO2(x): # предсказание NO2 на 20 минут
-    model = K.models.load_model('LCTmodels/NO2AllNoTestSeq1.h5')
-    pred = model.predict(x)
+def predict_NO2(x):  # предсказание NO2 на 20 минут
+
+    pred = modelNO2.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP10(x): # предсказание PM10 на 20 минут
-    model = K.models.load_model('LCTmodels/PM10MeteoNoTestSeq1.h5')
-    pred = model.predict(x)
+def predict_MP10(x):  # предсказание PM10 на 20 минут
+
+    pred = modelPM10.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_MP25(x): # предсказание PM2.5 на 20 минут
-    model = K.models.load_model('LCTmodels/PM25MeteoNotestSeq1.h5')
-    pred = model.predict(x)
+def predict_MP25(x):  # предсказание PM2.5 на 20 минут
+
+    pred = modelPM25.predict(x)
     return round(pred[0][0], 2)
 
 
-def predict_quality(obj): # функция паредсказания всех элементов на 20 минут исходя из последних данных
+def predict_quality(obj):  # функция паредсказания всех элементов на 20 минут исходя из последних данных
     predCO = predict_CO([[[obj.temp, obj.speed, obj.direction, obj.pressure, obj.humidity,  # придсказаниие CO
                            obj.precipitation, obj.CO]]])
-    predNO = predict_NO([[[obj.CO, obj.NO2, obj.NO, obj.temp, obj.speed, obj.direction, obj.pressure, obj.humidity,   # придсказаниие NO
-                           obj.precipitation]]])
-    predNO2 = predict_NO2([[[obj.CO, obj.NO2, obj.NO, obj.temp, obj.speed, obj.direction, obj.pressure, obj.humidity,   # придсказаниие NO2
-                             obj.precipitation]]])
-    predNMP10 = predict_MP10([[[obj.temp, obj.speed, obj.direction, obj.pressure,    # придсказаниие PM10
+    predNO = predict_NO(
+        [[[obj.CO, obj.NO2, obj.NO, obj.temp, obj.speed, obj.direction, obj.pressure, obj.humidity,  # придсказаниие NO
+           obj.precipitation]]])
+    predNO2 = predict_NO2(
+        [[[obj.CO, obj.NO2, obj.NO, obj.temp, obj.speed, obj.direction, obj.pressure, obj.humidity,  # придсказаниие NO2
+           obj.precipitation]]])
+    predNMP10 = predict_MP10([[[obj.temp, obj.speed, obj.direction, obj.pressure,  # придсказаниие PM10
                                 obj.humidity, obj.precipitation, obj.MP10]]])
-    predNMP25 = predict_MP25([[[obj.temp, obj.speed, obj.direction, obj.pressure,    # придсказаниие PM2.5
+    predNMP25 = predict_MP25([[[obj.temp, obj.speed, obj.direction, obj.pressure,  # придсказаниие PM2.5
                                 obj.humidity, obj.precipitation, obj.MP25]]])
     return [predCO, predNO, predNO2, predNMP10, predNMP25]
 
 
-def createPolygon(data, prop={}):   # функция создание объекта полигона для geojson
+def createPolygon(data, prop={}):  # функция создание объекта полигона для geojson
     pt = dict()
     pt["type"] = "Feature"
     pt["properties"] = prop
@@ -213,19 +238,19 @@ def get_tower(request):  # функция создания слоя geojson со
                                    'mean_qual': mean_qual,
                                    'MP25': d.MP25, 'no': 0, 'id': i.pk, 'pred': pred_data}).content.decode('utf-8')
             data.append(createPoint([i.lon, i.lat],
-                                    {'title': i.name, 'NO': d.NO, "NO2": d.NO2, "CO": d.CO, "MP10": d.MP10,
-                                     'MP25': d.MP25, 'no': 0, 'html': html, 'id': i.pk}))
+                                    {'title': i.name, 'no': d.NO, "no2": d.NO2, "co": d.CO, "pm10": d.MP10,
+                                     'pm25': d.MP25, 'no_el': 0, 'html': html, 'id': i.pk}))
         else:
             html = render(request, 'popus.html', context={'title': i.name, 'NO': 0, "NO2": 0, "CO": 0, "MP10": 0,
                                                           'MP25': 0, 'no': 1, 'id': i.pk}).content.decode('utf-8')
             data.append(createPoint([i.lon, i.lat],
-                                    {'title': i.name, 'NO': 0, "NO2": 0, "CO": 0, "MP10": 0,
-                                     'MP25': 0, 'no': 1, 'html': html, 'id': i.pk}))
+                                    {'title': i.name, 'no': 0, "no2": 0, "co": 0, "pm10": 0,
+                                     'pm25': 0, 'no_el': 1, 'html': html, 'id': i.pk}))
     tower = createLayer(data)
     return tower
 
 
-def get_prom():   # функция создания слоя geojson с промышленностью
+def get_prom():  # функция создания слоя geojson с промышленностью
     data = list()
     for i in Industry.objects.all():
         data.append(
@@ -245,38 +270,130 @@ def get_build():  # функция создания слоя geojson со стр
     return build
 
 
-def map(request):   # функция рендеринга страницы "Карта контроля"
+def get_rubbish():
+    data = list()
+    for i in Rubbish.objects.all():
+        data.append(
+            createPoint([i.lon, i.lat],
+                        {'title': i.name, 'address': i.address, 'index': i.index, 'phone': i.phone, 'email': i.email,
+                         'status': i.status,
+                         'S': i.S}))
+    rubbish = createLayer(data)
+    return rubbish
+
+
+def map(request):  # функция рендеринга страницы "Карта контроля"
     # [долгота, широта]
 
-    prom = get_prom()   # получения словаря (слоя с промышленностью)
+    prom = get_prom()  # получения словаря (слоя с промышленностью)
 
-    build = get_build()   # получения словаря (слоя со стройками)
+    build = get_build()  # получения словаря (слоя со стройками)
 
     tower = get_tower(request)  # получения словаря (слоя со станциями)
 
-    return render(request, "index.html", {'data': tower, 'prom': prom, 'build': build})
+    rubbish = get_rubbish()
+
+    return render(request, "index.html", {'data': tower, 'prom': prom, 'build': build, 'rubbish': rubbish})
 
 
-def statistics(request):   # функция рендеринга страницы "Статистика"
+def add_zero(value):
+    if len(str(value)) == 1:
+        return '0' + str(value)
+    return value
+
+
+def find_source():
+    apiKey = '7b6492cfbc234cb88afe6af6e38cf2a3'
+    df = pd.read_excel('123.xlsx')
+    coord = df['coord']
+    listbaqi = [76, 84, 69, 58, 61, 65, 73, 51, 63, 55, 58, 84, 84, 72, 67, 82, 61, 57, 60, 61, 73, 71, 58, 52, 61, 74,
+                69, 62, 66, 66]
+    min_baqi = 100
+    min_coord = list([0, 0])
+    min_dist = 1000000
+    station_dist = 1000000
+    obj = None
+    label = None
+    stat = None
+
+    for i in range(coord.shape[0]):
+        # ret = requests.get('https://api.breezometer.com/air-quality/v2/current-conditions?', params={
+        #     'lat': float(coord[i].split(',')[0]), 'lon': float(coord[i].split(',')[1]), 'key': apiKey
+        # })
+        # listbaqi.append(ret.json()['data']['indexes']['baqi']['aqi'])
+        if int(listbaqi[i]) < min_baqi:
+            min_baqi = listbaqi[i]
+            min_coord = [float(coord[i].split(',')[0]), float(coord[i].split(',')[1])]
+    for i in Building.objects.all():
+        dist = math.sqrt(math.pow((i.lat - min_coord[0]), 2) + math.pow((i.lon - min_coord[1]), 2))
+        if dist < min_dist:
+            min_dist = dist
+            obj = i
+            label = 'static/img/build.svg'
+
+    for i in Rubbish.objects.all():
+        dist = math.sqrt(math.pow((i.lat - min_coord[0]), 2) + math.pow((i.lon - min_coord[1]), 2))
+        if dist < min_dist:
+            min_dist = dist
+            obj = i
+            label = 'static/img/svalka.svg'
+    for i in Industry.objects.all():
+        dist = math.sqrt(math.pow((i.lat - min_coord[0]), 2) + math.pow((i.lon - min_coord[1]), 2))
+        if dist < min_dist:
+            min_dist = dist
+            obj = i
+            label = 'static/img/prom.svg'
+
+    for s in Station.objects.all():
+        dist = math.sqrt(math.pow((s.lat - obj.lat), 2) + math.pow((s.lon - obj.lon), 2))
+        if dist < station_dist:
+            station_dist = dist
+            stat = s
+    return obj, label, stat
+
+
+
+def statistics(request):  # функция рендеринга страницы "Статистика"
+    obj, label_warning, stat = find_source()
+
     label = list()
     CO = list()
     NO = list()
     NO2 = list()
     PM10 = list()
     PM25 = list()
+    datalist = dict()  # {'co': list(), 'no':list(), 'no2':list(), 'pm10':list(), 'pm25': list()}
     industry = Industry.objects.all()  # получений всех объектов промышленности
-    for s in Station.objects.all():   # перебор станций
+    for s in Station.objects.all():  # перебор станций
         data = Data.objects.filter(station=s).order_by('date').last()  # получение последних данных станции
+        datalist[s.id] = {'co': list(), 'no': list(), 'no2': list(), 'pm10': list(), 'pm25': list()}
         label.append(s.name)
         CO.append(data.CO)
         NO.append(data.NO)
         NO2.append(data.NO2)
         PM10.append(data.MP10)
         PM25.append(data.MP25)
-    data = weather.get_breez_current(55.755819, 37.617644)['data'] # получение погоды
+        for d in Data.objects.filter(station=s).order_by('date')[90:]:
+            datalist[s.id]['co'].append(d.CO)
+            datalist[s.id]['no'].append(d.NO)
+            datalist[s.id]['no2'].append(d.NO2)
+            datalist[s.id]['pm10'].append(d.MP10)
+            datalist[s.id]['pm25'].append(d.MP25)
+    datalist['label'] = [
+        f'{add_zero(i.date.day)}.{add_zero(i.date.month)}.{i.date.year} {add_zero(i.date.hour)}:{add_zero(i.date.minute)}'
+        for i in Data.objects.filter(station=Station.objects.get(name="Академика Анохина")).order_by('date')[90:]]
+    data = {'datetime': '2021-11-05T17:00:00Z', 'is_day_time': False, 'icon_code': 22, 'weather_text': 'Overcast',
+            'temperature': {'value': 13.01, 'units': 'C'}, 'feels_like_temperature': {'value': 11.38, 'units': 'C'},
+            'relative_humidity': 87,
+            'precipitation': {'precipitation_probability': 47, 'total_precipitation': {'value': 0.0, 'units': 'mm'}},
+            'wind': {'speed': {'value': 9.864, 'units': 'km/h'}, 'direction': 189},
+            'wind_gust': {'value': 36.612, 'units': 'km/h'}, 'pressure': {'value': 993.77, 'units': 'mb'},
+            'visibility': {'value': 10, 'units': 'km'}, 'dew_point': {'value': 10.96, 'units': 'C'},
+            'cloud_cover': 75}  # weather.get_breez_current(55.755819, 37.617644)['data']  # получение погоды
     return render(request, "statistics.html",
-                  {'ind': industry, 'data': data, 'label': label, 'co': CO, 'no': NO, 'no2': NO2, 'pm10': PM10,
-                   'pm25': PM25})
+                  {'ind': industry, 'datalist': datalist, 'station': Station.objects.all(), 'data': data,
+                   'label': label, 'co': CO, 'no': NO, 'no2': NO2, 'pm10': PM10, 'obj':obj, 'label_warning':label_warning,
+                   'pm25': PM25, 'stat': stat})
 
 
 def get_weather_hour(pogoda, now, next_time):  # функция получения погоды на определенный час
@@ -290,7 +407,8 @@ def get_weather_hour(pogoda, now, next_time):  # функция получени
     return pogoda_hour
 
 
-def set_false(name, station):  # функция вызывается в случае отсутствия данных на станции по которым можно делать прогноз
+def set_false(name,
+              station):  # функция вызывается в случае отсутствия данных на станции по которым можно делать прогноз
     pred = Prediction.objects.filter(name=name, station=station).first()
     if pred:
         pred.CO = 0
@@ -319,7 +437,8 @@ def all_predict():  # функция предсказания данных
                 '+22:00',
                 '+22:20', '+22:40', '+23:00', '+23:20', '+23:40', '+24:00']
     for s in Station.objects.all():
-        pogoda = weather.get_breez_forecast(lat=s.lat, lon=s.lon, hours=26)['data'][2:]  # получение прогноза погоды на различных станциях на 24 часа вперед
+        pogoda = weather.get_breez_forecast(lat=s.lat, lon=s.lon, hours=26)['data'][
+                 2:]  # получение прогноза погоды на различных станциях на 24 часа вперед
         for ind, name in enumerate(timeline, start=1):
             first_pred = False
             not_fail = True
@@ -355,7 +474,7 @@ def all_predict():  # функция предсказания данных
                             not_fail = False
                             break
                         first_pred = True
-                    else:     # предсказание хим элементов на 6 часов
+                    else:  # предсказание хим элементов на 6 часов
                         predCO1 = predict_CO_6(np.array([[[pogoda_hour['temperature']['value'],
                                                            round(pogoda_hour['wind']['speed']['value'] / 3.6, 2),
                                                            pogoda_hour['wind']['direction'],
@@ -405,7 +524,7 @@ def all_predict():  # функция предсказания данных
                     next_time += 180
                     if not first_pred:
                         data = Data.objects.filter(station=s).order_by('date').last()
-                        if data:                           # предсказание хим элементов в случае 1 прогноза на 3 часа
+                        if data:  # предсказание хим элементов в случае 1 прогноза на 3 часа
                             predCO = predict_CO_3(np.array([[[data.temp, data.speed,
                                                               data.direction, data.pressure, data.humidity,
                                                               data.precipitation, predCO]]]))
@@ -429,7 +548,7 @@ def all_predict():  # функция предсказания данных
                             not_fail = False
                             break
                         first_pred = True
-                    else:      # предсказание хим элементов на 3 часа
+                    else:  # предсказание хим элементов на 3 часа
                         predCO1 = predict_CO_3(np.array([[[pogoda_hour['temperature']['value'],
                                                            round(pogoda_hour['wind']['speed']['value'] / 3.6, 2),
                                                            pogoda_hour['wind']['direction'],
@@ -478,7 +597,7 @@ def all_predict():  # функция предсказания данных
                     next_time += 60
                     if not first_pred:
                         data = Data.objects.filter(station=s).order_by('date').last()
-                        if data:                                # предсказание хим элементов в случае 1 прогноза на 1 час
+                        if data:  # предсказание хим элементов в случае 1 прогноза на 1 час
                             predCO = predict_CO_1(np.array([[[data.temp, data.speed,
                                                               data.direction, data.pressure, data.humidity,
                                                               data.precipitation, data.CO]]]))
@@ -501,7 +620,7 @@ def all_predict():  # функция предсказания данных
                             not_fail = False
                             break
                         first_pred = True
-                    else:                # предсказание хим элементов на 1 час
+                    else:  # предсказание хим элементов на 1 час
                         predCO1 = predict_CO_1(np.array([[[pogoda_hour['temperature']['value'],
                                                            round(pogoda_hour['wind']['speed']['value'] / 3.6, 2),
                                                            pogoda_hour['wind']['direction'],
@@ -551,7 +670,7 @@ def all_predict():  # функция предсказания данных
                     next_time += 20
                     if not first_pred:
                         data = Data.objects.filter(station=s).order_by('date').last()
-                        if data:                                # предсказание хим элементов в случае 1 прогноза на 20 минут
+                        if data:  # предсказание хим элементов в случае 1 прогноза на 20 минут
                             predCO = predict_CO(np.array([[[data.temp, data.speed, data.direction, data.pressure,
                                                             data.humidity, data.precipitation, data.CO]]]))
                             predNO = predict_NO(np.array([[[data.CO, data.NO2, data.NO, data.temp, data.speed,
@@ -574,7 +693,7 @@ def all_predict():  # функция предсказания данных
                             not_fail = False
                             break
                         first_pred = True
-                    else:         # предсказание хим элементов на 20 минут
+                    else:  # предсказание хим элементов на 20 минут
                         predCO1 = predict_CO(np.array([[[pogoda_hour['temperature']['value'],
                                                          round(pogoda_hour['wind']['speed']['value'] / 3.6, 2),
                                                          pogoda_hour['wind']['direction'],
@@ -617,7 +736,7 @@ def all_predict():  # функция предсказания данных
                         predNO2 = round(predNO21, 2)
                         predMP10 = round(predMP101, 2)
                         predMP25 = round(predMP251, 2)
-            if not_fail:             # создание или изменение модели предсказания на определенный час на станции
+            if not_fail:  # создание или изменение модели предсказания на определенный час на станции
                 pred = Prediction.objects.filter(name=name, station=s).first()
                 print(name)
                 if pred:
@@ -642,7 +761,7 @@ def get_tower_for_predict(request):
     return tower
 
 
-def predict(request):   # функция рендеринга страницы "Прогноз"
+def predict(request):  # функция рендеринга страницы "Прогноз"
     # tut dimas skazal ti bomj i need 2 mernyi massiv
     threading.Thread(target=all_predict, args=()).start()
     timeline = ['+00:20', '+00:40', '+01:00', '+01:20', '+01:40', '+02:00', '+02:20', '+02:40', '+03:00', '+03:20',
@@ -668,7 +787,7 @@ def predict(request):   # функция рендеринга страницы "
     return render(request, "predict.html", data)
 
 
-def nn(size, input_size, out_size=1, type_nn='reg'):    # создание полносвязной модели
+def nn(size, input_size, out_size=1, type_nn='reg'):  # создание полносвязной модели
     model = M()
     model.add(L.Input(input_size))
     model.add(L.Flatten())
@@ -688,7 +807,7 @@ def nn(size, input_size, out_size=1, type_nn='reg'):    # создание по�
     return model
 
 
-def rnn(size, input_size, out_size, type_nn='reg'):      # создание рекурентной модели
+def rnn(size, input_size, out_size, type_nn='reg'):  # создание рекурентной модели
     model = M()
     model.add(L.Input(input_size))
     for i in range(size - 1):
@@ -709,7 +828,7 @@ def rnn(size, input_size, out_size, type_nn='reg'):      # создание ре
     return model
 
 
-def cnn(size, input_size, out_size, type_nn='classif'):     # создание сверточной модели
+def cnn(size, input_size, out_size, type_nn='classif'):  # создание сверточной модели
     model = M()
     model.add(L.Input(input_size))
     for i in range(size):
@@ -742,12 +861,12 @@ def create_model(request):  # функция рендеринга страниц
     return render(request, "create_model.html")
 
 
-def create_file(f):     # сохранение файла данных (признаки или ответы)
+def create_file(f):  # сохранение файла данных (признаки или ответы)
     with open(f.name, 'wb') as w:
         w.write(f.read())
 
 
-def get_data(data):     # получение признаков или ответов
+def get_data(data):  # получение признаков или ответов
     x_train = list()
     x = np.array(data)
     x = np.expand_dims(x, 1)
@@ -756,7 +875,8 @@ def get_data(data):     # получение признаков или отве�
     return np.array(x_train)
 
 
-def create_model_ajax(request):   # функция вызываемая запросом ajax для создания и обучения  выбранной кастомной модели модели
+def create_model_ajax(
+        request):  # функция вызываемая запросом ajax для создания и обучения  выбранной кастомной модели модели
     data = dict()
     config = request.POST
     x_file = request.FILES['features']
@@ -807,7 +927,8 @@ def create_model_ajax(request):   # функция вызываемая запр
 def save_model(request):
     pass
 
-def cancel_model(request):    # удаление модели
+
+def cancel_model(request):  # удаление модели
     os.remove('maybe.h5')
     return JsonResponse({'ok': 'ok'})
 
@@ -824,7 +945,8 @@ def location(request):  # функция рендеринга страницы "
         if form.is_valid():
             form.save()
             email_content = render(request, 'email.html').content.decode('utf-8')
-            msg = EmailMessage('Заявка', email_content, settings.EMAIL_HOST_USER, [request.POST['email']])    # отправка сообщения заявителю
+            msg = EmailMessage('Заявка', email_content, settings.EMAIL_HOST_USER,
+                               [request.POST['email']])  # отправка сообщения заявителю
             msg.content_subtype = 'html'
             msg.send()
             email_content = render(request, 'email_report.html').content.decode('utf-8')
@@ -839,7 +961,7 @@ def location(request):  # функция рендеринга страницы "
         return render(request, 'location.html', {'street': street, 'industry': industry})
 
 
-def get_pred(request):    # ajax запром на получение определенного предсказания
+def get_pred(request):  # ajax запром на получение определенного предсказания
     pred = Prediction.objects.filter(name=request.POST['name'],
                                      station=Station.objects.get(id=int(request.POST['id']))).first()
     return JsonResponse({'co': pred.CO, 'no': pred.NO, 'no2': pred.NO2, 'mp10': pred.MP10, 'mp25': pred.MP25})

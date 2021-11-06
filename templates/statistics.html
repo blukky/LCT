@@ -127,7 +127,8 @@
                                     <span class="float-right text-muted">{{ data.wind.speed.value|round_num }}/{{ data.wind_gust.value|round_num }}</span>
                                 </p>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ data.wind.speed.value|to_int }}" aria-valuemin="0"
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{ data.wind.speed.value|to_int }}" aria-valuemin="0"
                                          aria-valuemax="{{ data.wind_gust.value|to_int }}"></div>
                                 </div>
                             </div>
@@ -137,7 +138,8 @@
                                     <span class="float-right text-muted">{{ data.pressure.value }}/1 013,25</span>
                                 </p>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ data.pressure.value }}" aria-valuemin="0"
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{ data.pressure.value }}" aria-valuemin="0"
                                          aria-valuemax="1 013"></div>
                                 </div>
                             </div>
@@ -147,7 +149,8 @@
                                     <span class="float-right text-muted">{{ data.visibility.value }}/100</span>
                                 </p>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ data.visibility.value }}" aria-valuemin="0"
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{ data.visibility.value }}" aria-valuemin="0"
                                          aria-valuemax="100"></div>
                                 </div>
                             </div>
@@ -156,7 +159,8 @@
                                     <span class="float-right text-muted">{{ data.temperature.value }}/60</span>
                                 </p>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ data.temperature.value|int_temp }}" aria-valuemin="0"
+                                    <div class="progress-bar" role="progressbar"
+                                         aria-valuenow="{{ data.temperature.value|int_temp }}" aria-valuemin="0"
                                          aria-valuemax="60"></div>
                                 </div>
                             </div>
@@ -222,6 +226,68 @@
 
             </div>
 
+            <div class="row mb-4">
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group position-relative error-l-75">
+                                <label for="">Станция</label>
+                                <div class="form-group">
+                                    <select class="form-control" name="station" id="id_station">
+                                        {% for s in station %}
+                                            <option value="{{ s.id }}">{{ s.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group position-relative error-l-75">
+                                <label for="">Вещество</label>
+                                <div class="form-group">
+                                    <select class="form-control" name="vavo" id="id_vevo">
+                                        <option value="co">CO</option>
+                                        <option value="no">NO</option>
+                                        <option value="no2">NO2</option>
+                                        <option value="pm10">PM10</option>
+                                        <option value="pm25">PM2.5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-filled-line-chart">
+                        <div class="card-body ">
+                            <div class="float-left float-none-xs">
+                                <div class="d-inline-block">
+                                    <h5 class="d-inline">История показаний качетсва воздуха на станции <span id="chart_name">Академика Анохина</span></h5>
+                                    <span class="text-muted text-small d-block mt-4">мг/м<sup>3</sup></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart card-body pt-0">
+                            <canvas id="aquChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4" style="margin-top: 5rem">
+                    <div class="card dashboard-filled-line-chart">
+                        <div class="card-body ">
+                            <h3>
+                                <strong>ВНИМАНИЕ!</strong>
+                            </h3>
+                            <p><strong>Потенциальный источник загрязнения:</strong> <img class="ml-2" width="50px" src="{{ label_warning }}"></p>
+                            <p><strong>Название:</strong> {{ obj.name }}</p>
+                            <p><strong>Адрес:</strong> {{ obj.address }}</p>
+                            <p><strong>Координаты:</strong> {{ obj.lat }}, {{ obj.lon }}</p>
+                            <p><strong>Ближайшая станция:</strong> {{ stat.name }}</p>
+                            <a href="{% url 'location' %}" class="btn btn-danger">Пожаловаться</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="row mb-4">
                 <div class="col-12 data-tables-hide-filter">
@@ -281,6 +347,7 @@
 {% endblock %}
 
 {% block script %}
+
     <script type="text/javascript">
         var label =
         {{ label|safe }}
@@ -294,6 +361,9 @@
         {{ pm10|safe }}
         var pm25 =
         {{ pm25|safe }}
+
+        var chartData =
+        {{ datalist|safe }}
     </script>
 
     <script src="{% static 'js/vendor/jquery-3.3.1.min.js' %}"></script>
@@ -312,4 +382,15 @@
     <script src="{% static 'js/vendor/mousetrap.min.js' %}"></script>
     <script src="{% static 'js/startrek.script.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
+    <script type="text/javascript" >
+    jQuery(function () {
+        $('#id_station').change(function () {
+            var val = $(this).val();
+            var text = $(`option[value="${val}"]`).text();
+            $('#chart_name').text(text);
+        });
+    });
+    </script>
+
+
 {% endblock %}

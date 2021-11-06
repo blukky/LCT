@@ -40,6 +40,7 @@ admin.site.register(Street)
 admin.site.register(AddPollution)
 admin.site.register(Building)
 admin.site.register(Prediction)
+admin.site.register(Rubbish)
 
 admin.site.site_title = "MosEcoMonitoring Service"
 admin.site.site_header = "MosEcoMonitoring Service"

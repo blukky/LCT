@@ -59,6 +59,15 @@
             cursor: pointer;
         }
 
+        .rubbish {
+            background-image: url("{% static "img/svalka.svg" %}");
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
         .mapboxgl-popup {
             min-width: 400px;
             max-height: 500px;
@@ -179,6 +188,18 @@
         </div>
     </div>
 
+    <div class="row" id="veshestva"
+         style="z-index: 1030; position: absolute; margin-top: 120px; left: 10%; right: 10%; display: none">
+        <div class="alert alert-danger rounded" role="alert">
+            <strong>Внимание!</strong> Превышен показатель CO вблизи станции Академика Анохина.
+            <sup>
+                <button id="close_alert" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </sup>
+        </div>
+    </div>
+
     <div id="map" style="max-width: 100%;"></div>
 
     <div class="modal fade modal-right" id="exampleModalRight" tabindex="-1" role="dialog"
@@ -222,9 +243,9 @@
                             <span>Строительство</span>
                         </a>
 
-                        <a href="https://mosecom.mos.ru/karta-profilemerov/" target="_blank" id="prof" class="col icon-menu-item">
-                            <i class="iconsminds-dashboard d-block" style="font-size: 2rem"></i>
-                            <span>Профилемеры</span>
+                        <a href="#"  id="rub" class="col icon-menu-item">
+                            <i class="iconsminds-recycling-2 d-block" style="font-size: 2rem"></i>
+                            <span>Полигон ТБО</span>
                         </a>
                     </div>
                     <div class="row" align="center">
@@ -243,30 +264,25 @@
                         <label class="mt-4">Вещества в воздухе</label>
                         <table class="table table-hover">
                             <tbody>
-                            <tr class="odd">
+                            <tr class="odd shadow-lg vev" id="co">
                                 <th scope="row"><span class="badge badge-secondary mr-2">CO</span></th>
                                 <td colspan="2">Оксид углерода</td>
-                                <td>0.002</td>
                             </tr>
-                            <tr class="even">
+                            <tr class="even vev" id="no">
                                 <th scope="row"><span class="badge badge-secondary mr-2">NO</span></th>
                                 <td colspan="2">Оксид азота (II)</td>
-                                <td>0.002</td>
                             </tr>
-                            <tr class="odd">
+                            <tr class="odd vev" id="no2">
                                 <th scope="row"><span class="badge badge-secondary mr-2">NO2</span></th>
                                 <td colspan="2">Оксид азота (IV)</td>
-                                <td>0.002</td>
                             </tr>
-                            <tr class="even">
+                            <tr class="even vev" id="pm10">
                                 <th scope="row"><span class="badge badge-secondary mr-2">PM10</span></th>
                                 <td colspan="2">PM10</td>
-                                <td>0.01</td>
                             </tr>
-                            <tr class="even">
+                            <tr class="even vev" id="pm25">
                                 <th scope="row"><span class="badge badge-secondary mr-2">PM2.5</span></th>
                                 <td colspan="2">PM2.5</td>
-                                <td>0.001</td>
                             </tr>
                             </tbody>
                         </table>
@@ -371,12 +387,22 @@
     <script src="{% static 'js/startrek.script.js' %}"></script>
     <script src="{% static 'js/startrek.script.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/docs.js' %}"></script>
 
     <script>
         $(document).ready(function () {
             let document_ht = window.innerHeight;
             let map_ht = document_ht - 100;
             $('#map').css('height', map_ht);
+
+            $('body').click(function (e) {
+                if (!$('.modal-dialog').is(e.target) && $('.modal-dialog').has(e.target).length === 0) {
+                    $('button.close').trigger('click');
+                }
+            });
+            $('#confirm').click(function () {
+               $('button.close').trigger('click')
+            });
         });
 
     </script>
@@ -389,10 +415,28 @@
     <script type="text/javascript">
         jQuery(function () {
 
+            function showAlert() {
+                $('#veshestva').show(400);
+            }
+
+            setInterval(showAlert, 10000);
+
+
+            $('#close_alert').click(function () {
+                $('#veshestva').hide(400);
+            });
+
             var prom =
             {{ prom|safe }}
             var build =
             {{ build|safe }}
+            var data = {{ data|safe }};
+            var rubbish =
+            {{ rubbish|safe }}
+
+            const PDK = {co: 5, no: 0.4, no2: 0.2, pm10: 0.3, pm25: 0.16};
+
+
             var apiKey = "c053d5ae05234ab2a5b1adb9d9157932"; // Your BreezoMeter API key
             var mapBoxAccessToken = "pk.eyJ1IjoiZndlZHNmIiwiYSI6ImNrdW51eHU1ZzFyMjAycHJ2cHR1b3lqOGcifQ.gI7aoa75R-B_PY9sKSdNlQ"; // your mapbox access token from: https://account.mapbox.com
             mapboxgl.setRTLTextPlugin('https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.1.0/mapbox-gl-rtl-text.js');
@@ -429,12 +473,35 @@
 
             const deltaDistance = 100;
 
+            function getHTML(prop) {
+
+                var html = `<h3>${prop.title}</h3><hr/>
+                            <div>Показатель `;
+                $('.vev').each(function () {
+                    if ($(this).hasClass('shadow-lg')) {
+                        html += $(this).attr('id') != 'pm25' ? $(this).attr('id').toUpperCase() : 'PM2.5';
+                        html += ' равен ' + prop[$(this).attr('id')] + ` мг/м<sup>3</sup></div>
+                           <div>Относительно ПДК<sub>`;
+                        html += $(this).attr('id') != 'pm25' ? $(this).attr('id').toUpperCase() : 'PM2.5';
+                        html += `</sub>: ${(prop[$(this).attr('id')] / PDK[$(this).attr('id')]).toFixed(4)}</div>`
+                    }
+                });
+                return html
+            };
+
 // degrees the map rotates when the left or right arrow is clicked
             const deltaDegrees = 25;
 
             function easing(t) {
                 return t * (2 - t);
             }
+
+            $('.vev').click(function () {
+                $('.vev').each(function () {
+                    $(this).removeClass('shadow-lg');
+                });
+                $(this).addClass('shadow-lg');
+            });
 
             {#  map on load #}
             map.on("load", function () {
@@ -549,13 +616,17 @@
                             $('#veva').show();
                             $('#breez').addClass('activ');
                             $(this).removeClass('activ');
+                            $('#co').addClass('shadow-lg');
                             $('#wthr').hide();
                         } else {
                             map.setLayoutProperty('temp', 'visibility', 'visible');
                             map.setLayoutProperty('breez', 'visibility', 'none');
-                            $('#temp').addClass('shadow-lg');
                             $('#veva').hide();
                             $('#wthr').show();
+                            $('.vev').each(() => {
+                                $(this).removeClass('shadow-lg');
+                            });
+                            $('#temp').addClass('shadow-lg');
                             $('#breez').removeClass('activ');
                             $(this).addClass('activ');
                         }
@@ -569,6 +640,18 @@
                             } else {
                                 $(this).show(800);
                                 $('#prom').addClass('activ');
+                            }
+                        });
+                    });
+
+                    $('#rub').click(function () {
+                        $('.rubbish').each(function () {
+                            if ($(this).is(':visible')) {
+                                $(this).hide(800);
+                                $('#rub').removeClass('activ');
+                            } else {
+                                $(this).show(800);
+                                $('#rub').addClass('activ');
                             }
                         });
                     });
@@ -679,16 +762,22 @@
 
 
             {# set station #}
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
 
-            let data = {{ data|safe }};
             for (const {geometry, properties} of data.features) {
                 let el = document.createElement('div');
                 el.className = 'marker station';
                 el.id = "popus" + properties.id;
-                new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
+                var marker = new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
                         .setHTML(properties.html)
                 ).addTo(map);
+                var markerDiv = marker.getElement();
+                markerDiv.addEventListener('mouseenter', () => popup.setLngLat(geometry.coordinates).setHTML(getHTML(properties)).addTo(map));
+                markerDiv.addEventListener('mouseleave', () => popup.remove());
             }
 
             {#  end set station #}
@@ -703,11 +792,23 @@
                 el.style.display = 'none';
                 new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
-                        .setHTML(`<h1>${properties.title}</h1><hr/><p>${properties.discript}</p><hr/><p>${properties.ind}</p><hr/><p>${properties.phone}</p><hr/><p>${properties.email}</p><hr/><a href="/report/${properties.id}" class="btn btn-danger">Пожаловаться</a>`)
+                        .setHTML(`<h1>${properties.title}</h1><hr/><p>${properties.discript}</p><hr/><p>${properties.ind}</p><hr/><p>${properties.phone}</p><hr/><p>${properties.email}</p><hr/>`)
                 ).addTo(map);
             }
 
             {#  end set prom#}
+
+
+            for (const {geometry, properties} of rubbish.features) {
+                let el = document.createElement('div');
+                el.className = 'marker rubbish';
+                el.id = "rubbish" + properties.id;
+                el.style.display = 'none';
+                new mapboxgl.Marker(el).setLngLat(geometry.coordinates).setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(`<h1>${properties.title}</h1><hr/><p>Адрес: ${properties.address}</p><hr/><p>Индекс: ${properties.index}</p><hr/><p>Тел.: ${properties.phone}</p><hr/><p>Почта: ${properties.email}</p><hr/><p>Площадь: ${properties.S}</p><hr/><p>Статус: ${properties.status}</p><hr/>`)
+                ).addTo(map);
+            }
 
 
             {#            set build #}
@@ -727,18 +828,56 @@
 
             map.on('dblclick', function (e) {
                 const coord = [e.lngLat.lng, e.lngLat.lat];
-                console.log(e);
+                const Mco = 28;
+                const Mno = 30;
+                const Mno2 = 46;
+                const N = 24.05526 * 1000;
+                var min = Infinity;
+                var s_id = 0;
+                var text = ''
+                {#var shkala = {%  static "img/shakal.png" %};#}
+                for (const {geometry, properties} of data.features) {
+                    var dist = Math.sqrt(Math.pow(geometry.coordinates[0] - coord[0], 2) + Math.pow(geometry.coordinates[1] - coord[1], 2));
+                    if (dist < min) {
+                        min = dist;
+                        s_id = 'popus' + properties.id;
+                        text = properties.title;
+                    }
+                }
+
                 $.ajax({
                     url: `https://api.breezometer.com/air-quality/v2/current-conditions?lat=${e.lngLat.lat}&lon=${e.lngLat.lng}&key=${apiKey}&features=breezometer_aqi,pollutants_concentrations&lang=ru`,
                     type: 'GET',
                     success: function (data) {
-                        console.log(data);
-                        new mapboxgl.Popup()
+
+                        var pop = new mapboxgl.Popup()
                             .setLngLat(coord)
-                            .setHTML(`<h1>${data.data.indexes.baqi.aqi_display}%</h1><p>${data.data.indexes.baqi.dominant_pollutant}</p><p>${data.data.indexes.baqi.category}</p>`)
+                            .setHTML(`<div style="width: 90%">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <h1>${data.data.indexes.baqi.aqi_display}%</h1>
+                                                <p>${data.data.indexes.baqi.dominant_pollutant}</p>
+                                                <p>${data.data.indexes.baqi.category}</p>
+                                                <p> CO: ${(data.data.pollutants.co.concentration.value * Mco / N).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>NO2: ${(data.data.pollutants.no2.concentration.value * Mno2 / N).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>PM10: ${(data.data.pollutants.pm10.concentration.value / 1000).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>PM2.5: ${(data.data.pollutants.pm25.concentration.value / 1000).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>Ближайшая станция: ${text}  <a class="btn btn-success" id="goto">Перейти к станции</a></p>
+                                            </div>
+                                            <div class="col-4" style="margin-top: 40%">
+                                                  <i style="color: ${data.data.indexes.baqi.color}; font-size: 4rem" class="iconsminds-eci-icon"></i>
+                                            </div>
+                                        </div>
+                                        <img src="static/img/shakal.png" width="100%">
+                                     </div>`)
                             .addTo(map);
+                        $('#goto').click(function () {
+                            pop.remove();
+                            $('#' + s_id).trigger('click');
+                        });
                     }
                 });
+
             });
 
 
@@ -750,6 +889,7 @@
             map.on('mouseleave', 'prom', () => {
                 map.getCanvas().style.cursor = '';
             });
+
 
             {#  end set prom #}
 
@@ -1025,14 +1165,6 @@
                         });
                     }
                 }
-            });
-
-            $('body').click(function (e) {
-                var div = $('#exampleModalRight');
-                if (!$('.modal-dialog').is(e.target) && $('.modal-dialog').has(e.target).length === 0) {
-                    $('button.close').trigger('click');
-                }
-                $('#confirm').click(() => $('button.close').trigger('click'));
             });
         });
 

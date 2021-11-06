@@ -54,6 +54,10 @@ $(document).ready(function () {
             queue: false,
         }, 'linear');
 
+
+        $('#map').fadeOut(100);
+        $('#map').fadeIn(100);
+
         data['name'] = $('#timeline_id_' + selectId).text();
         $.ajax({
             url: 'get_pred',
@@ -92,6 +96,10 @@ $(document).ready(function () {
                 easing: 'linear',
                 queue: false,
             }, 'linear');
+
+            $('#map').fadeOut(100);
+            $('#map').fadeIn(100);
+
             data['name'] = $('#timeline_id_' + selectId).text();
             $.ajax({
                 url: 'get_pred',
@@ -131,6 +139,11 @@ $(document).ready(function () {
                 easing: 'linear',
                 queue: false,
             }, 'linear');
+
+            $('#map').fadeOut(100);
+            $('#map').fadeIn(100);
+
+
             data['name'] = $('#timeline_id_' + selectId).text();
             $.ajax({
                 url: 'get_pred',
@@ -224,14 +237,48 @@ $(document).ready(function () {
         now.setMinutes(0, 0, 0);
         console.log(DateFormat.format.date(now, 'yyyy-MM-ddTHH:mm:ss'));
         const coord = [e.lngLat.lng, e.lngLat.lat];
+        const Mco = 28;
+        const Mno = 30;
+        const Mno2 = 46;
+        const N = 24.05526 * 1000;
+
+        var min = Infinity;
+        var s_id = 0;
+        var text = '';
+        for (const {geometry, properties} of tower.features) {
+            var dist = Math.sqrt(Math.pow(geometry.coordinates[0] - coord[0], 2) + Math.pow(geometry.coordinates[1] - coord[1], 2));
+            if (dist < min) {
+                min = dist;
+                s_id = properties.id;
+                text = properties.title;
+            }
+        }
+
+
         $.ajax({
             url: `https://api.breezometer.com/air-quality/v2/forecast/hourly?lat=${e.lngLat.lat}&lon=${e.lngLat.lng}&key=${apiKey}&datetime=${DateFormat.format.date(now, 'yyyy-MM-ddTHH:mm:ss')}&lang=ru`,
             type: 'GET',
             success: function (data) {
+                console.log(data);
                 new mapboxgl.Popup()
                     .setLngLat(coord)
-                    .setHTML(`<h1>${data.data.indexes.baqi.aqi_display}%</h1><p>${data.data.indexes.baqi.dominant_pollutant}</p><p>${data.data.indexes.baqi.category}</p>`)
-                    .addTo(map);
+                   .setHTML(`<div style="width: 90%">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <h1>${data.data.indexes.baqi.aqi_display}%</h1>
+                                                <p>${data.data.indexes.baqi.dominant_pollutant}</p>
+                                                <p>${data.data.indexes.baqi.category}</p>
+                                                <p> CO: ${(data.data.pollutants.co.concentration.value * Mco / N).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>NO2: ${(data.data.pollutants.no2.concentration.value * Mno2 / N).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>PM10: ${(data.data.pollutants.pm10.concentration.value / 1000).toFixed(4)} мг/м<sup>3</sup></p>
+                                                <p>PM2.5: ${(data.data.pollutants.pm25.concentration.value / 1000).toFixed(4)} мг/м<sup>3</sup></p>
+                                            </div>
+                                            <div class="col-4" style="margin-top: 40%">
+                                                  <i style="color: ${data.data.indexes.baqi.color}; font-size: 4rem" class="iconsminds-eci-icon"></i>
+                                            </div>
+                                        </div>
+                                        <img src="static/img/shakal.png" width="100%">
+                                     </div>`).addTo(map);
             }
         });
     });

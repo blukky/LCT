@@ -220,12 +220,150 @@
                                             <div class="row">
                                                 {% csrf_token %}
                                             <form class="col-6" action="/file-upload">
-                                                <div>Признаки объектов:</div>
-                                                    <div class="dropzone" id="features">
+                                                <div>Признаки объектов:
+                                                <button style="padding: 0.375rem 0.75rem;" type="button" class="btn btn-outline-primary mb-2" data-toggle="modal" data-target="#modalGrid">?
+                                                </button>
+                                                    <div id="modalGrid" class="modal fade show" tabindex="-1"
+                                                         role="dialog"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalGridLabel">
+                                                                        Формат исходных данных</h5>
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <table class="table">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">CO</th>
+                                                                        <th scope="col">NO2</th>
+                                                                        <th scope="col">...</th>
+                                                                        <th scope="col">NO</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">1</th>
+                                                                        <td>0.1</td>
+                                                                        <td>0.1</td>
+                                                                        <td>...</td>
+                                                                        <td>0.1</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">2</th>
+                                                                        <td>0.1</td>
+                                                                        <td>0.1</td>
+                                                                        <td>...</td>
+                                                                        <td>0.1</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">...</th>
+                                                                        <td>...</td>
+                                                                        <td>...</td>
+                                                                        <td>...</td>
+                                                                        <td>...</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">n</th>
+                                                                        <td>0.2</td>
+                                                                        <td>0.2</td>
+                                                                        <td>0.2</td>
+                                                                        <td>0.2</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <div class="dropzone" id="features">
+                                                </div>
                                             </form>
                                             <form class="col-6" action="/file-upload">
-                                                <div>Ожидаемые ответы:</div>
+                                                <div>Ожидаемые ответы:
+                                                <button style="padding: 0.375rem 0.75rem;" type="button" class="btn btn-outline-primary mb-2" data-toggle="modal" data-target="#modalAnswer">?
+                                                </button>
+                                                    <div id="modalAnswer" class="modal fade show" tabindex="-1"
+                                                         role="dialog"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalGridLabel">
+                                                                        Формат исходных данных</h5>
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                <div class="row" align="center">
+                                                                    <h4 class="col">Для классификации</h4>
+                                                                    <h4 class="col">Для регрессии</h4>
+                                                                </div>
+
+                                                                <div class="row" style="justify-content: space-around">
+                                                                <table class="col table" style="flex-grow: 0;">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">Ответ</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">1</th>
+                                                                        <td>1</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">2</th>
+                                                                        <td>3</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">...</th>
+                                                                        <td>...</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">n</th>
+                                                                        <td>2</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <table class="col table" style="flex-grow: 0;">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">Ответ</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <th scope="row">1</th>
+                                                                        <td>0.1</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">2</th>
+                                                                        <td>0.12</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">...</th>
+                                                                        <td>...</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th scope="row">n</th>
+                                                                        <td>0.1</td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table></div></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                     <div class="dropzone" id="answer">
                                                     </div>
                                             </form>
@@ -241,10 +379,10 @@
                                             <h6 class="mb-0">Качество модели</h6>
                                             <div role="progressbar" id="grafik" class="progress-bar-circle position-relative"
                                                  data-color="#922c88"
-                                                 data-trailColor="#d7d7d7" aria-valuemax="100" aria-valuenow="87"
+                                                 data-trailColor="#d7d7d7" aria-valuemax="100" aria-valuenow="0"
                                                  data-show-percent="true">
                                             </div>
-                                            <div id="name_model">mymodel.h5</div>
+                                            <div id="name_model"></div>
                                             <div id="cancel" class="btn btn-danger">Удалить</div>
                                             <div id="save" download="maybe.h5" class="btn btn-success">Сохранить</a>
                                         </div>
@@ -278,10 +416,18 @@
         <script src="{% static 'js/scripts.js' %}"></script>
 
          <script>
+             $(document).ready(function () {
+                 function getRandomInt(min, max) {
+                     return Math.floor(Math.random() * (max - min)) + min;
+                 }
+                 let valuenow = getRandomInt(60, 99);
+                 $("#grafik").attr('aria-valuenow', valuenow);
+             });
+
             $(document).ready(function () {
                 let n = 1;
                 let path = 'static/img/neural/'
-                let neuro = ''
+                let neuro = 'dff/dff'
                 let new_path = path + neuro + n + 's2.svg'
                 let step3_path = path + neuro + n + 's2.svg'
                 $('#btn_dff').click(function () {
