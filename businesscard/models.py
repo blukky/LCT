@@ -7,6 +7,7 @@ from django.shortcuts import render
 
 class Station(models.Model):
     name = models.CharField(max_length=255, verbose_name="Название станции")
+    url = models.CharField(max_length=255, null=True, blank=True, verbose_name='Сайт')
     lat = models.FloatField(verbose_name='Широта')
     lon = models.FloatField(verbose_name='Долгота')
 
@@ -48,7 +49,7 @@ class Data(models.Model):  # создание таблицы данных
     pressure = models.FloatField(verbose_name='Давление', blank=True, null=True)
     humidity = models.FloatField(verbose_name='Влажность', blank=True, null=True)
     precipitation = models.FloatField(verbose_name='Осадки', blank=True, null=True)
-    date = models.DateTimeField(verbose_name="Дата и время", auto_now=True)
+    date = models.DateTimeField(verbose_name="Дата и время", auto_now=False)
 
     def __str__(self):
         return f"Данные со станции {self.station.name} в {self.date}"

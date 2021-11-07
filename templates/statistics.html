@@ -139,7 +139,7 @@
                                 </p>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"
-                                         aria-valuenow="{{ data.pressure.value }}" aria-valuemin="0"
+                                         aria-valuenow="{{ data.pressure.value|to_int }}" aria-valuemin="0"
                                          aria-valuemax="1 013"></div>
                                 </div>
                             </div>

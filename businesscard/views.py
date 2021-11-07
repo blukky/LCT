@@ -4,6 +4,8 @@ import math
 import tensorflow.keras as K
 import tensorflow.keras.layers as L
 from tensorflow.keras.models import Sequential as M
+from bs4 import BeautifulSoup as bs
+from time import sleep
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.losses import categorical_crossentropy, binary_crossentropy
 import numpy as np
@@ -282,8 +284,58 @@ def get_rubbish():
     return rubbish
 
 
+def parce():
+    now = datetime.datetime.now()
+    time = datetime.datetime(year=now.year, month=now.month, day=now.day, hour=now.hour)
+    print(time)
+    for s in Station.objects.all():
+        if not Data.objects.filter(station=s, date=time).first():
+            data = {'datetime': '2021-11-05T17:00:00Z', 'is_day_time': False, 'icon_code': 22, 'weather_text': 'Overcast',
+            'temperature': {'value': 13.01, 'units': 'C'}, 'feels_like_temperature': {'value': 11.38, 'units': 'C'},
+            'relative_humidity': 87,
+            'precipitation': {'precipitation_probability': 47, 'total_precipitation': {'value': 0.0, 'units': 'mm'}},
+            'wind': {'speed': {'value': 9.864, 'units': 'km/h'}, 'direction': 189},
+            'wind_gust': {'value': 36.612, 'units': 'km/h'}, 'pressure': {'value': 993.77, 'units': 'mb'},
+            'visibility': {'value': 10, 'units': 'km'}, 'dew_point': {'value': 10.96, 'units': 'C'},
+            'cloud_cover': 75}#weather.get_breez_current(s.lat,s.lon)
+            page = requests.get(s.url).content
+            page = bs(page, 'lxml')
+            cards = page.find_all('div', class_='content-tab')[1].find_all('div', class_='item-block')
+            pm10 = None
+            pm25 = None
+            co = None
+            no = None
+            no2 = None
+            for card in cards:
+                if card.find('div', class_='text-norma').text.replace('\t', '').replace(' ', '').replace('\n', '') == 'PM10':
+                    pm10 = float(card.find('span', class_='this-count').text.replace('\t', '').replace(' ', '').replace('\n', ''))
+                if card.find('div', class_='text-norma').text.replace('\t', '').replace(' ', '').replace('\n', '') == 'PM2,5':
+                    pm25 = float(card.find('span', class_='this-count').text.replace('\t', '').replace(' ', '').replace('\n', ''))
+                if card.find('div', class_='text-norma').text.replace('\t', '').replace(' ', '').replace('\n', '') == 'CO':
+                    co = float(card.find('span', class_='this-count').text.replace('\t', '').replace(' ', '').replace('\n', ''))
+                if card.find('div', class_='text-norma').text.replace('\t', '').replace(' ', '').replace('\n', '') == 'NO':
+                    no = float(card.find('span', class_='this-count').text.replace('\t', '').replace(' ', '').replace('\n', ''))
+                if card.find('div', class_='text-norma').text.replace('\t', '').replace(' ', '').replace('\n', '') == 'NO2':
+                    no2 = float(card.find('span', class_='this-count').text.replace('\t', '').replace(' ', '').replace('\n', ''))
+            if pm10 == None:
+                pm10 = 0
+            if pm25 == None:
+                pm25 = 0
+            if co == None:
+                co = 0
+            if no == None:
+                no = 0
+            if no2 == None:
+                no2 = 0
+            Data.objects.create(station=s, date=time, MP25=pm25, MP10=pm10, CO=co, NO=no, NO2=no2, speed=round(data['wind']['speed']['value'] / 3.6, 2),
+                                temp=data['temperature']['value'], direction=data['wind']['direction'], pressure=round(data['pressure']['value'] / 1.333, 2),
+                                humidity=data['relative_humidity'], precipitation=data['precipitation']['total_precipitation']['value']).save()
+
+
 def map(request):  # функция рендеринга страницы "Карта контроля"
     # [долгота, широта]
+
+    parce()
 
     prom = get_prom()  # получения словаря (слоя с промышленностью)
 
@@ -352,7 +404,6 @@ def find_source():
     return obj, label, stat
 
 
-
 def statistics(request):  # функция рендеринга страницы "Статистика"
     obj, label_warning, stat = find_source()
 
@@ -392,7 +443,8 @@ def statistics(request):  # функция рендеринга страницы
             'cloud_cover': 75}  # weather.get_breez_current(55.755819, 37.617644)['data']  # получение погоды
     return render(request, "statistics.html",
                   {'ind': industry, 'datalist': datalist, 'station': Station.objects.all(), 'data': data,
-                   'label': label, 'co': CO, 'no': NO, 'no2': NO2, 'pm10': PM10, 'obj':obj, 'label_warning':label_warning,
+                   'label': label, 'co': CO, 'no': NO, 'no2': NO2, 'pm10': PM10, 'obj': obj,
+                   'label_warning': label_warning,
                    'pm25': PM25, 'stat': stat})
 
 

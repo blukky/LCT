@@ -256,7 +256,7 @@ $(document).ready(function () {
 
 
         $.ajax({
-            url: `https://api.breezometer.com/air-quality/v2/forecast/hourly?lat=${e.lngLat.lat}&lon=${e.lngLat.lng}&key=${apiKey}&datetime=${DateFormat.format.date(now, 'yyyy-MM-ddTHH:mm:ss')}&lang=ru`,
+            url: `https://api.breezometer.com/air-quality/v2/forecast/hourly?lat=${e.lngLat.lat}&lon=${e.lngLat.lng}&key=${apiKey}&datetime=${DateFormat.format.date(now, 'yyyy-MM-ddTHH:mm:ss')}&features=breezometer_aqi,pollutants_concentrations&lang=ru`,
             type: 'GET',
             success: function (data) {
                 console.log(data);
